@@ -51,7 +51,7 @@ public class BoardController {
 
     @PostMapping("board_update")
     public String board_update_proc(BoardDto boardDto) throws Exception {//pathvariable("page") 안받는 이유 : BoardDto에 page 필드가 있기 때문에
-        //새로운 파일을 선택하면 기존의 파일(oldFileName; bsfile)을 삭제해야한다; 선택 안하면 삭제 안해도 됨 <- 제일 먼저 작성
+        //새로운 파일을 선택하면 기존의 파일(oldFileName; bsfile)을 삭제해야한다; 선택 안하면 삭제 안해도 됨 <- 제일 먼저 작성!
         String oldBsfile = boardDto.getBsfile(); //if client upload new file, old file name is in oldBsFile;
         boardDto = (BoardDto) fileUploadService.fileCheck(boardDto); //checking whether there's file or not; if client upload new file, insert new bfile, bsfile name
 
