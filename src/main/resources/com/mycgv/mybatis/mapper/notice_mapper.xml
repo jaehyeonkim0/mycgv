@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.springboot.mycgv.repository.NoticeMapper">
+    <select id="list" parameterType="com.springboot.mycgv.dto.PageDto" resultType="com.springboot.mycgv.dto.NoticeDto">
+        select rno, nid, ntitle, ncontent, nhits, ndate from (
+        select rownum rno,nid,ntitle,ncontent,nhits,to_char(ndate,'YY-MM-DD') ndate from (
+        select nid,ntitle,ncontent,nhits,ndate from mycgv_notice order by ndate desc))
+        where rno between #{startCount} and #{endCount}
+    </select>
+
+<!--    <select id="list2" resultType="com.mycgv_jsp.vo.NoticeVo">-->
+<!--        select rownum rno, nid, ntitle, ncontent, nhits, to_char(ndate, 'YY-MM-DD') ndate from (-->
+<!--        select nid, ntitle, ncontent, nhits, ndate from mycgv_notice order by ndate desc)-->
+<!--    </select>-->
+
+    <select id="content" parameterType="java.lang.String" resultType="com.springboot.mycgv.dto.NoticeDto">
+        select nid, ntitle, ncontent, nhits, to_char(ndate, 'YY-MM-DD') ndate
+        from mycgv_notice
+        where nid=#{nid}
+    </select>
+
+<!--    <insert id="insert" parameterType="com.mycgv_jsp.vo.NoticeVo">-->
+<!--        insert into mycgv_notice (nid, ntitle, ncontent, nhits, ndate, nfile1, nsfile1, nfile2, nsfile2)-->
+<!--        values ('n_'||trim(to_char(sequ_mycgv_notice.nextval,'0000')),#{ntitle},#{ncontent},0,sysdate, #{nfile1}, #{nsfile1}, #{nfile2}, #{nsfile2})-->
+<!--    </insert>-->
+
+<!--    <update id="update" parameterType="com.mycgv_jsp.vo.NoticeVo">-->
+<!--        update mycgv_notice set ntitle=#{ntitle}, ncontent=#{ncontent} where nid=#{nid}-->
+<!--    </update>-->
+
+<!--    <delete id="delete" parameterType="String">-->
+<!--        delete from mycgv_notice where nid=#{nid}-->
+<!--    </delete>-->
+
+<!--    <update id="updateHits" parameterType="String">-->
+<!--        update mycgv_notice set nhits=nhits+1 where nid=#{nid}-->
+<!--    </update>-->
+
+</mapper>
