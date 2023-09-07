@@ -17,9 +17,7 @@ $(document).ready(function(){
 		}
 	
 	});
-	
-	
-	
+
 	/*******************************************
 				회원가입 폼 - 아이디 중복체크
 	 ********************************************/
@@ -32,12 +30,7 @@ $(document).ready(function(){
 			updateForm.submit();
 		}
 	});
-	
-	
-	
-	
-	
-	
+
 	/*******************************
 			게시판 - 등록 폼
 	 *******************************/
@@ -52,10 +45,7 @@ $(document).ready(function(){
 		}
 		
 	});
-	
-	
-	
-	
+
 	/*******************************************
 		회원가입 폼 - 아이디 중복체크
 	********************************************/
@@ -69,11 +59,13 @@ $(document).ready(function(){
 				url : "idcheck/" + $("#id").val()+"/",
 				success : function(result){
 					if(result == "1"){
+						$(".joinError").css("display", "none");
 						$("#idcheck_msg").text("이미 사용중인 아이디 입니다. 다시 입력해주세요")
 						.css("color","red").css("font-size","11px").css("display","block")
 						.css("padding","8px 0px 8px 160px");
 						$("#id").val("").focus();
 					}else if(result == "0"){
+						$(".joinError").css("display", "none");
 						$("#idcheck_msg").text("사용 가능한 아이디 입니다")
 						.css("color","blue").css("font-size","11px").css("display","block")
 						.css("padding","8px 0px 8px 160px");
@@ -83,9 +75,7 @@ $(document).ready(function(){
 			});
 		}
 	});
-		
-	
-	
+
 	/*******************************************
 		회원가입 폼 체크 - 주소찾기 : daum API 
 	********************************************/
@@ -99,23 +89,8 @@ $(document).ready(function(){
 	    }).open();
 		
 	}); //search address
-	
-	/*******************************************
-		회원가입 폼 체크 - 이메일 체크 
-	********************************************/
-	$("#email3").on("change", function(){
-		if($("#email3").val() == "default"){
-			alert("이메일을 선택해주세요");
-			$("#email2").val("");
-			$("#email3").focus();
-		}else if($("#email3").val() == "self"){
-			$("#email2").val("").focus();
-		}else{
-			$("#email2").val($("#email3").val());
-		}		
-		
-	}); //email address change
-	
+
+
 	/*******************************************
 		회원가입 폼 체크 - 비밀번호 & 비밀번호 확인 
 	********************************************/
@@ -126,7 +101,7 @@ $(document).ready(function(){
 					.css("font-size","11px").css("display","block");
 				$("#name").focus();
 			}else{
-				$("#cmsg").text("비밀번호가 동일하지 않습니다. 다시  입력해주세요")
+				$("#cmsg").text("비밀번호가 동일하지 않습니다. 다시 입력해주세요")
 				.css("color","red").css("font-size","11px").css("display","block");
 				
 				$("#pass").val("").focus();
@@ -134,11 +109,38 @@ $(document).ready(function(){
 			}
 		}
 	}); //cpass blur
-	
+
 	/*******************************
-		회원가입 폼 체크 - 유효성체크(값의 유무만 확인)
+		로그인 폼 체크
+
+	$("#btnLogin").click(function(){
+		if($("#id").val() == ""){
+			alert("아이디를 입력해주세요");
+			$("#id").focus();
+			return false;
+		}else if($("#pass").val() == ""){
+			alert("패스워드를 입력해주세요");
+			$("#pass").focus();
+			return false;			
+		}else{
+			//서버전송
+			loginForm.submit();
+		}
+	});	//btnLogin click
+	 *******************************/
+	/*******************************
+		로그인 폼 - 다시쓰기 
 	*******************************/
-	$("#btnJoin").click(function(){
+	$("#btnLoginReset").click(function(){
+		$("#id").val("").focus();
+		$("#pass").val("");
+	}); //btnLoginReset click
+
+
+	/*******************************
+	 회원가입 폼 체크 - 유효성체크(값의 유무만 확인)
+
+	 $("#btnJoin").click(function(){
 		if($("#id").val() == ""){
 			alert("아이디를 입력해주세요");
 			$("#id").focus();
@@ -201,35 +203,7 @@ $(document).ready(function(){
 			joinForm.submit();
 		}
 	});	//btnJoin
-	
-	
-	/*******************************
-		로그인 폼 체크
-	*******************************/
-	$("#btnLogin").click(function(){
-		if($("#id").val() == ""){
-			alert("아이디를 입력해주세요");
-			$("#id").focus();
-			return false;
-		}else if($("#pass").val() == ""){
-			alert("패스워드를 입력해주세요");
-			$("#pass").focus();
-			return false;			
-		}else{
-			//서버전송
-			loginForm.submit();
-		}
-	});	//btnLogin click
-	
-	/*******************************
-		로그인 폼 - 다시쓰기 
-	*******************************/
-	$("#btnLoginReset").click(function(){
-		$("#id").val("").focus();
-		$("#pass").val("");
-	}); //btnLoginReset click
-	
-	
+	 *******************************/
 	
 
 }); //ready

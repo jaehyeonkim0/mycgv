@@ -18,28 +18,26 @@ if(c == 'ok') {
 </script>
 </head>
 <body>
-	
-	<!-- header -->
-	<!-- <iframe src="http://localhost:9005/header.jsp"
-			scrolling="no" width="100%" height="149px" frameborder=0></iframe> -->
 	<jsp:include page="../header.jsp"></jsp:include>
 	
 	<!-- content -->
 	<div class="content">
 		<section class="login">
 			<h1 class="title">로그인</h1>
-			<form name="loginForm" action="login" method="post" >
+			<form name="loginForm" action="/login?redirectURL=${param.redirectURL}" method="post" >
 				<ul>
 					<li>
 						<label>아이디</label>
-						<input type="text" name="id" id="id">
+						<input type="text" name="id" id="id" value="${memberDto.id}">
+						<span class="loginError">${valid_id}</span>
 					</li>
 					<li>
 						<label>패스워드</label>
 						<input type="password" name="pass" id="pass">
+						<span class="loginError">${valid_pass}</span>
 					</li>
 					<li>
-						<button type="button" class="btn_style" id="btnLogin" >로그인</button>
+						<button type="submit" class="btn_style" id="btnLogin" >로그인</button>
 						<button type="button" class="btn_style" id="btnLoginReset">다시쓰기</button>
 					</li>
 					<li>
@@ -50,10 +48,7 @@ if(c == 'ok') {
 			</form>
 		</section>
 	</div>
-	
-	<!-- footer -->
-	<!-- <iframe src="http://localhost:9005/footer.jsp"
-			scrolling="no" width="100%" height="500px" frameborder=0></iframe> -->	
+
 	<jsp:include page="../footer.jsp"></jsp:include>
 </body>
 </html>

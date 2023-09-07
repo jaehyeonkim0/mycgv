@@ -9,13 +9,16 @@
 		where id=#{id} and pass=#{pass}	group by name, id
 	</select>
 
-	<select id="idcheck" parameterType="String" resultType="int">
+	<select id="idCheck" parameterType="String" resultType="int">
 		SELECT COUNT(*) FROM MYCGV_MEMBER WHERE ID=#{id}
 	</select>
 
 	<insert id="join" parameterType="com.springboot.mycgv.dto.MemberDto">
 		insert into mycgv_member (id, pass, name, gender, email, addr, tel, pnumber, hobbylist, intro, mdate, grade)
-		values (#{id},#{pass},#{name}, #{gender},#{email},#{addr},#{tel},#{pnumber},#{hobbyList},#{intro},sysdate,'GOLD')
+		values (#{id},#{pass},#{name},#{gender, jdbcType=VARCHAR},
+		        #{email},#{addr, jdbcType=VARCHAR},#{tel, jdbcType=VARCHAR},
+		        #{pnumber, jdbcType=VARCHAR},#{hobbyList, jdbcType=VARCHAR},
+		        #{intro, jdbcType=VARCHAR},sysdate,'GOLD')
 	</insert>
 <!--	<select id="list" parameterType="map" resultType="com.mycgv_jsp.vo.MemberVo">-->
 <!--	select rno, id, name, mdate, grade from (-->

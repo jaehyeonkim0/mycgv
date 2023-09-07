@@ -18,10 +18,13 @@ public class SessionConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        InterceptorRegistration interceptorRegistration = registry.addInterceptor(new SessionAuthInterceptor());
-        interceptorRegistration.addPathPatterns("/mypage**/**", "admin**/**"); // page which should be checked session check
-        interceptorRegistration.excludePathPatterns(); // page which client can go without session check
-
+//        InterceptorRegistration interceptorRegistration = registry.addInterceptor(new SessionAuthInterceptor());
+//        interceptorRegistration.addPathPatterns("/mypage**/**", "admin**/**"); // page which should be checked session check
+//        interceptorRegistration.excludePathPatterns(); // page which client can go without session check
+        registry.addInterceptor(new SessionAuthInterceptor())
+                .order(1)
+                .addPathPatterns("/mypage**/**", "admin**/**")
+                .excludePathPatterns();
     }
 
 

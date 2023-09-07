@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,15 +21,16 @@
 				<ul>
 					<li>
 						<label>아이디</label>
-						<input type="text" name="id" 
-							placeholder="* 8자 이상 영문으로 입력해주세요" class="input1"
-							id="id" >
+						<input type="text" name="id" placeholder="* 아이디는 필수 입력 항목입니다" class="input1"
+							id="id" value="${memberDto.id}">
 						<button type="button" class="btn_style2" id="btnIdCheck">중복체크</button>
 						<span id="idcheck_msg"></span>
+						<span class="joinError">${valid_id}</span>
 					</li>
 					<li>
 						<label>비밀번호</label>
 						<input type="password" name="pass" class="input1" id="pass">
+						<span class="joinError">${valid_pass}</span>
 					</li>
 					<li>
 						<label>비밀번호 확인</label>
@@ -37,25 +39,18 @@
 					</li>
 					<li>
 						<label>성명</label>
-						<input type="text" name="name" class="input1" id="name">
+						<input type="text" name="name" class="input1" id="name" value="${memberDto.name}">
+						<span class="joinError">${valid_name}</span>
 					</li>
 					<li>
 						<label>성별</label>
-						<input type="radio" name="gender" value="m"><span>남자</span> 
-						<input type="radio" name="gender" value="f"><span>여자</span>
+						<input type="radio" name="gender" value="m" ${memberDto.gender == 'm' ? 'checked' : ''}><span>남자</span>
+						<input type="radio" name="gender" value="f" ${memberDto.gender == 'f' ? 'checked' : ''}><span>여자</span>
 					</li>
 					<li>
 						<label>이메일</label>
-						<input type="text" name="email1" id="email1"> @
-						<input type="text" name="email2" id="email2">
-						<select id="email3" id="email3">
-							<option value="default">선택</option>
-							<option value="naver.com">네이버</option>
-							<option value="gmail.com">구글</option>
-							<option value="daum.net">다음</option>
-							<option value="korea.com">코리아</option>
-							<option value="self">직접입력</option>
-						</select>
+						<input type="text" name="email" class="input1" value="${memberDto.email}" placeholder="* abc@example.com">
+						<span class="joinError">${valid_email}</span>
 					</li>
 					<li>
 						<label>주소</label>
@@ -68,9 +63,9 @@
 					</li>
 					<li>
 						<label>휴대폰</label>
-						<input type="radio" name="tel" value="skt"><span>SKT</span>
-						<input type="radio" name="tel" value="lgu+"><span>LGU+</span>
-						<input type="radio" name="tel" value="kt"><span>KT</span>
+						<input type="radio" name="tel" value="skt" ${memberDto.tel == 'skt' ? 'checked' : ''}><span>SKT</span>
+						<input type="radio" name="tel" value="lgu+" ${memberDto.tel == 'lgu+' ? 'checked' : ''}><span>LGU+</span>
+						<input type="radio" name="tel" value="kt" ${memberDto.tel == 'kt' ? 'checked' : ''}><span>KT</span>
 						<select name="phone1" id="phone1">
 							<option value="default">선택</option>
 							<option value="011">011</option>
@@ -92,7 +87,7 @@
 						<textarea name="intro" placeholder="*200자 이내로 작성해주세요"></textarea>
 					</li>
 					<li>
-						<button type="button" class="btn_style" id="btnJoin">가입하기</button>
+						<button type="submit" class="btn_style" id="btnJoin">가입하기</button>
 						<button type="reset" class="btn_style">다시입력</button>
 					</li>			
 				</ul>

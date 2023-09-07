@@ -3,24 +3,34 @@ package com.springboot.mycgv.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+
 @Getter
 @Setter
 public class MemberDto {
 
     int rno;
 
-    String id, pass, name, gender, email1, email2, addr1, addr2, tel,
+    @NotBlank(message = "아이디는 필수 입력 항목입니다")
+    String id;
+
+    @NotBlank(message = "비밀번호는 필수 입력 항목입니다")
+    String pass;
+
+    @NotBlank(message = "이름은 필수 입력 항목입니다")
+    String name;
+
+    @NotBlank(message = "이메일은 필수 입력 항목입니다")
+    @Email(message = "올바른 이메일 형식이 아닙니다")
+    String email;
+
+    String gender, addr1, addr2, tel,
             phone1, phone2, phone3, intro, grade;
     String[] hobby;
 
-    String email, addr, pnumber, hobbyList, mdate;
+    String addr, pnumber, hobbyList, mdate;
 
-    public String getEmail() {
-        if(email1 != null) {
-            email = email1 + "@" + email2;
-        }
-        return email;
-    }
     public String getAddr() {
         if (addr1 != null) {
             addr = addr1 + addr2;

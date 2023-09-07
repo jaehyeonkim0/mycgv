@@ -11,5 +11,7 @@ public interface MemberMapper {
 
     int join(MemberDto memberDto);
 
-    int idcheck(String id);
+    int idCheck(String id);
+
+
 }

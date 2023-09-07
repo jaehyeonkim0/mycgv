@@ -23,7 +23,7 @@ public class MemberService {
     }
 
 
-    public int idcheck(String id) {
-        return memberMapper.idcheck(id);
+    public int idCheck(String id) {
+        return memberMapper.idCheck(id);
     }
 }

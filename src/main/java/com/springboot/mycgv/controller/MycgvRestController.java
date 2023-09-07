@@ -45,10 +45,10 @@ public class MycgvRestController {
         return map;
     }
 
-    @GetMapping("idcheck/{id}")
-    public String idcheck(@PathVariable String id){
-        return String.valueOf(memberService.idcheck(id));
-    }
+//    @GetMapping("idcheck/{id}")
+//    public String idcheck(@PathVariable String id){
+//        return String.valueOf(memberService.idCheck(id));
+//    }
 
 }
 

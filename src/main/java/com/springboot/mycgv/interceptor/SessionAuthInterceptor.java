@@ -5,10 +5,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.springboot.mycgv.dto.SessionDto;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 
-
+@Slf4j
 public class SessionAuthInterceptor extends HandlerInterceptorAdapter {
 
 	/**checking before go to Controller
@@ -46,16 +48,18 @@ public class SessionAuthInterceptor extends HandlerInterceptorAdapter {
 								HttpServletResponse response, 
 								Object handler)
 								throws Exception {
-
-		HttpSession session = request.getSession(); /**checking whether there's session or not*/
+		String requestURI = request.getRequestURI();
+		HttpSession session = request.getSession(false); /**checking whether there's session or not*/
 		SessionDto svo = (SessionDto)session.getAttribute("svo");
-		
-		if(svo == null) {
-			response.sendRedirect("/login");
+
+		if(session == null || svo == null) {
+			response.sendRedirect("/login?redirectURL="+requestURI);
 			return false;
 		}
 			return true;
 	}
+
+
 }
 
 
