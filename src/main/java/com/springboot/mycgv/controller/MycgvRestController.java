@@ -5,8 +5,7 @@ import com.springboot.mycgv.dto.PageDto;
 import com.springboot.mycgv.service.BoardService;
 import com.springboot.mycgv.service.MemberService;
 import com.springboot.mycgv.service.PageService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,16 +15,13 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@AllArgsConstructor
 public class MycgvRestController {
 
-    @Autowired
-    MemberService memberService;
 
-    @Autowired
-    BoardService boardService;
-
-    @Autowired
-    PageService pageService;
+    private MemberService memberService;
+    private BoardService boardService;
+    private PageService pageService;
 
     @GetMapping("board_content_json_data/{bid}/")
     public BoardDto board_content_json_data(@PathVariable String bid){
@@ -45,10 +41,10 @@ public class MycgvRestController {
         return map;
     }
 
-//    @GetMapping("idcheck/{id}")
-//    public String idcheck(@PathVariable String id){
-//        return String.valueOf(memberService.idCheck(id));
-//    }
+    @GetMapping("idCheck/{id}")
+    public String idCheck(@PathVariable String id){
+        return String.valueOf(memberService.idCheck(id));
+    }
 
 }
 

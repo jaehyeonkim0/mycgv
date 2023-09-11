@@ -258,7 +258,7 @@ section.login form ul li > input {
 	margin-left:10px;
 	font-size:10pt;
 }
-section.login form ul li:nth-child(3) {
+section.login form ul li:nth-child(4) {
 	padding:20px 0 0 170px;
 } 
 section.login form ul li:nth-child(3) > button:first-child {
@@ -527,7 +527,10 @@ section.admin div article {
 	color: red;
 	font-size : 11px;
 	display: block;
-	padding : 8px 0px 8px 160px;
+	padding : 0px 0px 8px 160px;
+}
+.joinError {
+	padding-top: 8px;
 }
 
 .loginError {

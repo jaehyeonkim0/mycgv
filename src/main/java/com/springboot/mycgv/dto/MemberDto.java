@@ -5,31 +5,36 @@ import lombok.Setter;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 @Getter
 @Setter
-public class MemberDto {
+public class MemberDto{
 
-    int rno;
+    private int rno;
 
     @NotBlank(message = "아이디는 필수 입력 항목입니다")
-    String id;
+    @Size(max = 10, message = "아이디는 10글자 이하로 작성해주세요")
+    @Pattern(regexp = "^[a-zA-Z0-9]*$", message = "영문 또는 영문+숫자로만 입력하세요")
+    private String id;
 
     @NotBlank(message = "비밀번호는 필수 입력 항목입니다")
-    String pass;
+    private String password;
 
     @NotBlank(message = "이름은 필수 입력 항목입니다")
-    String name;
+    @Pattern(regexp = "^[가-힣]*$", message = "한글로만 입력하세요")
+    private String name;
 
     @NotBlank(message = "이메일은 필수 입력 항목입니다")
     @Email(message = "올바른 이메일 형식이 아닙니다")
-    String email;
+    private String email;
 
-    String gender, addr1, addr2, tel,
+    private String gender, addr1, addr2, tel,
             phone1, phone2, phone3, intro, grade;
-    String[] hobby;
+    private String[] hobby;
 
-    String addr, pnumber, hobbyList, mdate;
+    private String addr, pnumber, hobbyList, mdate;
 
     public String getAddr() {
         if (addr1 != null) {

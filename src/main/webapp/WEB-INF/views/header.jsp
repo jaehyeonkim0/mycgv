@@ -17,7 +17,9 @@
 				<c:when test="${sessionScope.svo == null }">
 					<ul>
 						<li><a href="http://localhost:9005/login">로그인</a></li>
+						<li><a href="http://localhost:9005/logout">로그아웃</a></li>
 						<li><a href="http://localhost:9005/join">회원가입</a></li>
+						<li><a href="http://localhost:9005/signup">회원가입2</a></li>
 						<li><a href="http://localhost:9005/mypage">마이페이지</a></li>
 						<li><a href="#">VIP</a></li>
 						<li><a href="#">고객센터</a></li>

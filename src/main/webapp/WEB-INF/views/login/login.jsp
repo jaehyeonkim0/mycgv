@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>    
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,14 +9,6 @@
 <link rel="stylesheet" href="http://localhost:9005/css/mycgv_jsp.css">
 <script src="http://localhost:9005/js/jquery-3.6.4.min.js"></script>
 <script src="http://localhost:9005/js/mycgv_jsp_jquery.js"></script>
-<script>
-
-let c = "${join_result }";
-
-if(c == 'ok') {
-	alert("회원가입 성공");
-}
-</script>
 </head>
 <body>
 	<jsp:include page="../header.jsp"></jsp:include>
@@ -24,17 +17,22 @@ if(c == 'ok') {
 	<div class="content">
 		<section class="login">
 			<h1 class="title">로그인</h1>
-			<form name="loginForm" action="/login?redirectURL=${param.redirectURL}" method="post" >
+			<form name="loginForm" action="/login" method="post">
 				<ul>
 					<li>
 						<label>아이디</label>
-						<input type="text" name="id" id="id" value="${memberDto.id}">
+						<input type="text" name="id">
 						<span class="loginError">${valid_id}</span>
 					</li>
 					<li>
 						<label>패스워드</label>
-						<input type="password" name="pass" id="pass">
+						<input type="password" name="password">
 						<span class="loginError">${valid_pass}</span>
+					</li>
+					<li>
+					<c:if test="${param.error != null}">
+						<span class="loginError">아이디 또는 비밀번호를 잘못 입력했습니다. 다시 입력해주세요.</span>
+					</c:if>
 					</li>
 					<li>
 						<button type="submit" class="btn_style" id="btnLogin" >로그인</button>

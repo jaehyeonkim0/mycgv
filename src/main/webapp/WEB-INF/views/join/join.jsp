@@ -29,13 +29,13 @@
 					</li>
 					<li>
 						<label>비밀번호</label>
-						<input type="password" name="pass" class="input1" id="pass">
-						<span class="joinError">${valid_pass}</span>
+						<input type="password" name="password" class="input1" id="password">
+						<span class="joinError">${valid_password}</span>
 					</li>
 					<li>
 						<label>비밀번호 확인</label>
-						<input type="password" name="cpass" class="input1" id="cpass">
-                        <span id="cmsg"></span>						     
+						<input type="password" name="cpassword" class="input1" id="cpassword">
+                        <span id="cmsg"></span>
 					</li>
 					<li>
 						<label>성명</label>
