@@ -14,32 +14,29 @@
 		<div class="header_menu">
 			<nav class="nav1">
 				<c:choose>
-				<c:when test="${sessionScope.svo == null }">
+				<c:when test="${empty pageContext.request.remoteUser}">
 					<ul>
 						<li><a href="http://localhost:9005/login">로그인</a></li>
-						<li><a href="http://localhost:9005/logout">로그아웃</a></li>
 						<li><a href="http://localhost:9005/join">회원가입</a></li>
-						<li><a href="http://localhost:9005/signup">회원가입2</a></li>
 						<li><a href="http://localhost:9005/mypage">마이페이지</a></li>
 						<li><a href="#">VIP</a></li>
 						<li><a href="#">고객센터</a></li>
 						<li><a href="http://localhost:9005/notice_list/1/">공지사항</a></li>
-						<li><a href="http://localhost:9005/board_list/1/">게시판</a></li>
-						<!-- <li><a href="http://localhost:9005/admin/admin_index.jsp" target="_parent">ADMIN</a></li> -->
+						<li><a href="http://localhost:9005/board_list">게시판</a></li>
 					</ul>
 				</c:when>
 				<c:otherwise>
 					<ul>
-						<li>${sessionScope.svo.name }님 반갑습니다</li>
+						<li>${pageContext.request.remoteUser}님 반갑습니다</li>
 						<li><a href="http://localhost:9005/logout">로그아웃</a></li>
-						<!-- <li><a href="http://localhost:9005/join/join.jsp">회원가입</a></li> -->
 						<li><a href="http://localhost:9005/mypage">마이페이지</a></li>
 						<li><a href="#">VIP</a></li>
 						<li><a href="#">고객센터</a></li>
 						<li><a href="http://localhost:9005/notice_list/1/">공지사항</a></li>
-						<li><a href="http://localhost:9005/board_list/1/">게시판</a></li>
+<%--						<li><a href="http://localhost:9005/board_list/1/">게시판</a></li>--%>
+						<li><a href="http://localhost:9005/board_list">게시판</a></li>
 						<li><a href="http://localhost:9005/board_list_json">게시판(JSON)</a></li>
-						<c:if test="${sessionScope.svo.id == 'admin' }">
+						<c:if test="${pageContext.request.remoteUser == 'admin' }">
 							<li id="admin-menu"><a href="http://localhost:9005/admin/index">ADMIN</a></li>
 						</c:if>
 					</ul>

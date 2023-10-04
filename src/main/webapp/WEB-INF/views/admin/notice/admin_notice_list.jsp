@@ -49,7 +49,7 @@
 			<table class="board_list">
 				<tr>
 					<td colspan="4">
-						<a href="notice_write">
+						<a href="/admin/notice_write">
 							<button type="button">등록하기</button>
 						</a>
 					</td>

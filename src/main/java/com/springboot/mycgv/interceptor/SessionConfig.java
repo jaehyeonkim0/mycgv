@@ -1,7 +1,6 @@
 package com.springboot.mycgv.interceptor;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -23,7 +22,7 @@ public class SessionConfig implements WebMvcConfigurer {
 //        interceptorRegistration.excludePathPatterns(); // page which client can go without session check
         registry.addInterceptor(new SessionAuthInterceptor())
                 .order(1)
-                .addPathPatterns("/mypage**/**", "admin**/**")
+                .addPathPatterns("admin**/**") //"/mypage**/**", "admin**/**"
                 .excludePathPatterns();
     }
 

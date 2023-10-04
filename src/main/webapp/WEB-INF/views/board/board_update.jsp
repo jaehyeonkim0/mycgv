@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>    
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,22 +8,22 @@
 <title>MYCGV</title>
 <link rel="stylesheet" href="http://localhost:9005/mycgv/css/mycgv.css">
 <script src="http://localhost:9005/js/jquery-3.6.4.min.js"></script>
-<script src="http://localhost:9005/js/mycgv_jsp_jquery.js"></script>
-<script>
+<%--<script src="http://localhost:9005/js/mycgv_jsp_jquery.js"></script>--%>
+<%--<script>--%>
 
-$(document).ready(function(){
-	
-	$("#file1").on("change", function(){
-		if(window.FileReader){
-			let fname = $(this)[0].files[0].name;
-			//FileReader = 파일 고르는 창; $(this)[0] = 파일 고르는 창이 여러개 있을 수 있으니까 첫번째(?), $(this)[0].files[0]= 파일 고르는창에서 파일을 하나 이상 고를 수 있기 때문에 첫번째 파일 이름
-			$("#update_file").text(fname);
-		}
-	});
-	
-});
+<%--$(document).ready(function(){--%>
+<%--	--%>
+<%--	$("#file1").on("change", function(){--%>
+<%--		if(window.FileReader){--%>
+<%--			let fname = $(this)[0].files[0].name;--%>
+<%--			//FileReader = 파일 고르는 창; $(this)[0] = 파일 고르는 창이 여러개 있을 수 있으니까 첫번째(?), $(this)[0].files[0]= 파일 고르는창에서 파일을 하나 이상 고를 수 있기 때문에 첫번째 파일 이름--%>
+<%--			$("#update_file").text(fname);--%>
+<%--		}--%>
+<%--	});--%>
+<%--	--%>
+<%--});--%>
 
-</script>
+<%--</script>--%>
 <style>
 	#update_file {
 		border: 1px solid white;
@@ -58,38 +58,23 @@ $(document).ready(function(){
 							<textarea rows="5" cols="30" name="bcontent">${board.bcontent }</textarea>
 						</td>
 					</tr>
-					<tr>
-						<th>작성자</th>
-						<td>
-							<input type="text" name="id" value="${board.id }" disabled>
-							<input type="hidden" name="id" value="${board.id }">
-							<input type="hidden" name="bid" value="${board.bid }">
-							<input type="hidden" name="page" value="${page}">
-						</td>
-					</tr>
-					<tr>
-						<th>업로드</th>
-						<td>
-							<input type="hidden" name="bfile" value="${board.bfile }">
-							<input type="hidden" name="bsfile" value="${board.bsfile }">
-							<input type="file" name="file1" id="file1"><br>
-							<c:choose>
-								<c:when test="${board.bfile != null }" >
-									<span id="update_file">${board.bfile }</span>
-								</c:when>
-								<c:otherwise>
-									<span id="update_file">선택된 파일없음</span>
-								</c:otherwise>
-							</c:choose>
-						</td>
-					</tr>
+					<input type="hidden" name="bid" value="${board.bid }">
+					<input type="hidden" name="id" value="${board.id }">
+					<input type="hidden" name="bhits" value="${board.bhits }">
+
+<%--					<tr>--%>
+<%--						<th>작성자</th>--%>
+<%--						<td>--%>
+<%--							<input type="hidden" name="id" value="${board.id }">--%>
+<%--						</td>--%>
+<%--					</tr>--%>
 					<tr>
 						<td colspan="2">
-							<button type="button" class="btn_style" id="btnBoardUpdate">수정완료</button>
+							<button type="submit" class="btn_style" id="btnBoardUpdate">수정완료</button>
 							<button type="reset" class="btn_style">다시쓰기</button>
-							<a href="/board_content/${board.bid }/${page}/">
+							<a href="/board_content/${board.bid }">
 								<button type="button" class="btn_style">이전페이지</button></a>
-							<a href="/board_list/${page}">
+							<a href="/board_list">
 								<button type="button" class="btn_style">리스트</button></a>							
 						</td>				
 					</tr>

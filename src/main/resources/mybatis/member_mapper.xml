@@ -4,22 +4,22 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!--경로 : 인터페이스의 위치; id값(login)의 값이 인터페이스의 메소드 이름과 같아야한다-->
 <mapper namespace="com.springboot.mycgv.repository.MemberMapper">
-	<select id="login" parameterType="com.springboot.mycgv.dto.MemberDto" resultType="com.springboot.mycgv.dto.SessionDto">
-		select count(*) loginresult, name, id from mycgv_member
-		where id=#{id} and pass=#{pass}	group by name, id
-	</select>
+<!--	<select id="login" parameterType="com.springboot.mycgv.dto.MemberDto" resultType="com.springboot.mycgv.dto.SessionDto">-->
+<!--		select count(*) loginresult, name, id from mycgv_member-->
+<!--		where id=#{id} and pass=#{pass}	group by name, id-->
+<!--	</select>-->
 
 	<select id="idCheck" parameterType="String" resultType="int">
 		SELECT COUNT(*) FROM MYCGV_MEMBER WHERE ID = #{id}
 	</select>
 
-	<insert id="join" parameterType="com.springboot.mycgv.dto.MemberDto">
-		insert into mycgv_member (id, password, name, gender, email, addr, tel, pnumber, hobbylist, intro, mdate, grade)
-		values (#{id},#{password},#{name},#{gender, jdbcType=VARCHAR},
-		        #{email},#{addr, jdbcType=VARCHAR},#{tel, jdbcType=VARCHAR},
-		        #{pnumber, jdbcType=VARCHAR},#{hobbyList, jdbcType=VARCHAR},
-		        #{intro, jdbcType=VARCHAR},sysdate,'GOLD')
-	</insert>
+<!--	<insert id="save" parameterType="com.springboot.mycgv.dto.MemberDto">-->
+<!--		insert into mycgv_member (ID, PASSWORD, NAME, GENDER, EMAIL, ADDR, TEL, PNUMBER, HOBBYLIST, INTRO, MDATE, GRADE)-->
+<!--		values (#{id},#{password},#{name},#{gender, jdbcType=VARCHAR},-->
+<!--		        #{email},#{addr, jdbcType=VARCHAR},#{tel, jdbcType=VARCHAR},-->
+<!--		        #{pnumber, jdbcType=VARCHAR},#{hobbyList, jdbcType=VARCHAR},-->
+<!--		        #{intro, jdbcType=VARCHAR},sysdate,'GOLD')-->
+<!--	</insert>-->
 <!--	<select id="list" parameterType="map" resultType="com.mycgv_jsp.vo.MemberVo">-->
 <!--	select rno, id, name, mdate, grade from (-->
 <!--	select rownum rno, id, name, to_char(mdate,'YYYY-MM-DD') mdate, grade from (-->

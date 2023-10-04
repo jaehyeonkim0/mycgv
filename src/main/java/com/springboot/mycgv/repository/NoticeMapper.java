@@ -11,4 +11,6 @@ public interface NoticeMapper {
     NoticeDto content(String nid);
     List<NoticeDto> list(PageDto pageDto);
 
+    int save(NoticeDto noticeDto);
+
 }

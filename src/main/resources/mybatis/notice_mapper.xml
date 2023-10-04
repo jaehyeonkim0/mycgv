@@ -22,9 +22,15 @@
         where nid=#{nid}
     </select>
 
-<!--    <insert id="insert" parameterType="com.mycgv_jsp.vo.NoticeVo">-->
+    <insert id="save" parameterType="com.springboot.mycgv.dto.NoticeDto">
+        insert into mycgv_notice (nid, ntitle, ncontent, nhits, ndate)
+        values ('n_'||trim(to_char(sequ_mycgv_notice.nextval,'0000')),#{ntitle},#{ncontent},0,sysdate)
+    </insert>
+
+<!--    <insert id="save" parameterType="com.springboot.mycgv.dto.NoticeDto">-->
 <!--        insert into mycgv_notice (nid, ntitle, ncontent, nhits, ndate, nfile1, nsfile1, nfile2, nsfile2)-->
-<!--        values ('n_'||trim(to_char(sequ_mycgv_notice.nextval,'0000')),#{ntitle},#{ncontent},0,sysdate, #{nfile1}, #{nsfile1}, #{nfile2}, #{nsfile2})-->
+<!--        values ('n_'||trim(to_char(sequ_mycgv_notice.nextval,'0000')),#{ntitle},#{ncontent},0,sysdate, #{nfile1, jdbcType=VARCHAR},-->
+<!--                #{nsfile1, jdbcType=VARCHAR}, #{nfile2, jdbcType=VARCHAR}, #{nsfile2, jdbcType=VARCHAR})-->
 <!--    </insert>-->
 
 <!--    <update id="update" parameterType="com.mycgv_jsp.vo.NoticeVo">-->

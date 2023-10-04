@@ -421,6 +421,7 @@ section.board tr:nth-child(2) {
 	background:#ddd;
 	color:#333;	
 }
+
 section.notice tr:last-child td,
 section.board tr:last-child td {
 	border:1px solid white;

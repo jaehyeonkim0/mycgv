@@ -7,7 +7,6 @@
 <title>MYCGV</title>
 <link rel="stylesheet" href="http://localhost:9005/css/mycgv_jsp.css">
 <script src="http://localhost:9005/js/jquery-3.6.4.min.js"></script>
-<script src="http://localhost:9005/js/mycgv_jsp_jquery.js"></script>
 </head>
 <body>
 	<!-- header -->
@@ -24,21 +23,21 @@
 					<tr>
 						<th class="test">제목</th>
 						<td>
-							<input type="text" name="btitle" id="btitle"
-								placeholder="*제목은 반드시 입력해주세요" >
+							<input type="text" name="btitle" id="btitle" placeholder="*제목은 반드시 입력해주세요"
+							value="${valid_btitle}">
 						</td>
 					</tr>
 					<tr>
 						<th>내용</th>
 						<td>
-							<textarea rows="5" cols="30" name="bcontent"></textarea>
+							<textarea rows="5" cols="30" name="bcontent">${valid_bcontent}</textarea>
 						</td>
 					</tr>
 					<tr>
 						<th>작성자</th>
 						<td>
-							<input type="text" name="id" value="hong1234" disabled>
-							<input type="hidden" name="id" value="hong1234">
+							<input type="text" name="id" value="${member_id}" disabled>
+							<input type="hidden" name="id" value="${member_id}">
 						</td>
 					</tr>
 					<tr>
@@ -49,9 +48,9 @@
 					</tr>
 					<tr>
 						<td colspan="2">
-							<button type="button" class="btn_style" id="btnBoardWrite">등록완료</button>
+							<button type="submit" class="btn_style" id="btnBoardWrite">등록완료</button>
 							<button type="reset" class="btn_style">다시쓰기</button>
-							<a href="board_list/1/">
+							<a href="/board_list">
 								<button type="button" class="btn_style">리스트</button></a>
 							<a href="http://localhost:9005/">
 								<button type="button" class="btn_style">홈으로</button></a>

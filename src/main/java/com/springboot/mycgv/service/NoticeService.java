@@ -6,9 +6,7 @@ import com.springboot.mycgv.repository.NoticeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class NoticeService {
@@ -22,6 +20,10 @@ public class NoticeService {
 
     public NoticeDto content(String nid) {
         return noticeMapper.content(nid);
+    }
+
+    public int insert(NoticeDto noticeDto) {
+        return noticeMapper.save(noticeDto);
     }
 
 

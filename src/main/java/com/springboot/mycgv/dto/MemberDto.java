@@ -1,5 +1,6 @@
 package com.springboot.mycgv.dto;
 
+import com.springboot.mycgv.model.Member;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,9 +11,7 @@ import javax.validation.constraints.Size;
 
 @Getter
 @Setter
-public class MemberDto{
-
-    private int rno;
+public class MemberDto {
 
     @NotBlank(message = "아이디는 필수 입력 항목입니다")
     @Size(max = 10, message = "아이디는 10글자 이하로 작성해주세요")
@@ -30,11 +29,23 @@ public class MemberDto{
     @Email(message = "올바른 이메일 형식이 아닙니다")
     private String email;
 
-    private String gender, addr1, addr2, tel,
-            phone1, phone2, phone3, intro, grade;
+    private String gender;
+    private String addr;
+    private String pnumber;
+    private String hobbyList;
+
+    private String memberCreatedTime;
+    private String memberUpdatedTime;
+
+    private String grade;
+
+    private int rno;
+    private String addr1, addr2;
+    private String tel, phone1, phone2, phone3;
+    private String intro;
     private String[] hobby;
 
-    private String addr, pnumber, hobbyList, mdate;
+
 
     public String getAddr() {
         if (addr1 != null) {
@@ -44,7 +55,7 @@ public class MemberDto{
     }
     public String getPnumber() {
         if(phone1 != null) {
-            pnumber = phone1 +"-"+ phone2 +"-"+ phone3;
+            pnumber = phone1 + phone2 + phone3;
         }
         return pnumber;
     }
@@ -54,4 +65,21 @@ public class MemberDto{
         }
         return hobbyList;
     }
+
+    public Member toEntity() {
+        return Member.builder()
+                .id(id)
+                .password(password)
+                .name(name)
+                .gender(gender)
+                .email(email)
+                .addr(getAddr())
+                .tel(tel)
+                .pnumber(getPnumber())
+                .hobbyList(getHobbyList())
+                .intro(intro)
+                .grade(grade)
+                .build();
+    }
+
 }

@@ -33,6 +33,30 @@ public class MemberController {
         return "join/join";
     }
 
+//    @PostMapping("join")
+//    public String join_proc(@Valid @ModelAttribute MemberDto memberDto, Errors errors, Model model) {
+//
+//        /* post요청시 넘어온 user 입력값에서 Validation에 걸리는 경우 */
+//        if (errors.hasErrors()) {
+//            /* 회원가입 실패시 입력 데이터 유지 : @ModelAttribute MemberDto memberDto */
+//            Map<String, String> validateResult = validService.validateHandler(errors);
+//            // map.keySet() -> 모든 key값을 갖고온다.
+//            // 그 갖고온 키로 반복문을 통해 키와 에러 메세지로 매핑
+//            for (String key : validateResult.keySet()) {
+//                // ex) model.addAtrribute("valid_id", "아이디는 필수 입력사항 입니다.")
+//                model.addAttribute(key, validateResult.get(key));
+//            }
+//            return "join/join";
+//        } else if(memberService.idCheck(memberDto.getId()) == 1) {
+//            model.addAttribute("valid_id", "중복된 아이디입니다");
+//            return "join/join";
+//        } else if(memberService.insert(memberDto) == 1) {
+//            return "redirect:/login";
+//        }
+//
+//        return "redirect:/login";
+//    }
+
     @PostMapping("join")
     public String join_proc(@Valid @ModelAttribute MemberDto memberDto, Errors errors, Model model) {
 
@@ -47,13 +71,9 @@ public class MemberController {
                 model.addAttribute(key, validateResult.get(key));
             }
             return "join/join";
-        } else if(memberService.idCheck(memberDto.getId()) == 1) {
-            model.addAttribute("valid_id", "중복된 아이디입니다");
-            return "join/join";
-        } else if(memberService.join(memberDto) == 1) {
-            return "redirect:/login";
+        }else {
+            memberService.save(memberDto);
         }
-
         return "redirect:/login";
     }
 

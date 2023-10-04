@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>    
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,7 +17,6 @@
 		<section class="board">
 			<h1 class="title">게시판</h1>
 			<table class="board_content">
-				
 				<tr>
 					<th>제목</th>
 					<td>${board.btitle }</td>
@@ -41,15 +40,15 @@
 				</tr>
 				<tr>
 					<th>작성일자</th>
-					<td>${board.bdate }</td>
+					<td>${board.boardUpdatedTime != null ? board.boardUpdatedTime : board.boardCreatedTime}</td>
 				</tr>
 				<tr>
 					<td colspan="2">
-						<a href="/board_update/${board.bid }/${page}/">
+						<a href="/board_update/${board.bid }">
 							<button type="button" class="btn_style">수정하기</button></a>
-						<a href="/board_delete/${board.bid }/${page}/">
+						<a href="/board_delete/${board.bid }">
 							<button type="button" class="btn_style">삭제하기</button></a>
-						<a href="/board_list/${page}">
+						<a href="/board_list">
 							<button type="button" class="btn_style">리스트</button></a>
 						<a href="http://localhost:9005/">
 							<button type="button" class="btn_style">홈으로</button></a>

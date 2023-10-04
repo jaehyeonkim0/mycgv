@@ -34,16 +34,16 @@ public class PageService {
         }
 
         //총 페이지 수 계산
-        if(dbCount % pageSize == 0){
+        if(dbCount % pageSize == 0){ //DB에서 가져온 전체 행 수 % 페이지당 게시물 수 == 0
             pageCount = dbCount/pageSize;
         }else{
             pageCount = dbCount/pageSize+1;
         }
 
         //요청 페이지 계산
-        if(pageDto.getPage() != null){
+        if(pageDto.getPage() != null){ //처음 로딩이 아니고 페이지 정보가 있을 때, reqPage : 요청 페이지.
             reqPage = Integer.parseInt(pageDto.getPage());
-            startCount = (reqPage-1) * pageSize+1;
+            startCount = (reqPage-1) * pageSize+1; //페이지당 게시물 수(pageSize)가 5, 요청 페이지(reqPage)가 2일때, 게시물 시작 번호는 6
             endCount = reqPage * pageSize;
         }else{ //처음 로딩할때(page=null일 때)는 요청 페이지 없음 무조건 1페이지여서 startCount(데이터 1번부터) endCount(5번까지 보여줘라)
             startCount = 1;
