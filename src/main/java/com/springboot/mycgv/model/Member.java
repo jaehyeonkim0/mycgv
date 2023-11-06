@@ -5,13 +5,14 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+/***
+ * 비주인 엔터티는 주인 엔터티의 변경 사항을 읽기만 할 수 있습니다.
+ */
 
 @Getter
 @Entity
 @Table(name = "MYCGV_MEMBER")
 @NoArgsConstructor(access = AccessLevel.PROTECTED) //해당 클래스의 기본 생성자를 생성해 주는 어노테이션
-@AllArgsConstructor
-@Builder
 public class Member extends Time {
 
     @Id
@@ -51,30 +52,21 @@ public class Member extends Time {
     @OneToMany(mappedBy = "member")
     private List<Board> lists = new ArrayList<>();
 
-//    public void add(Board board) {
-//        Board.builder()
-//                .member(this)
-//                .build();
-//        getLists().add(board);
-//    }
-
-
-//    @Builder
-//    public Member (String id, String password, String name, String gender,
-//                String email, String addr, String tel, String pnumber,
-//                String hobbyList, String intro, String grade, List<Board> lists) {
-//        this.id = id;
-//        this.password = password;
-//        this.name = name;
-//        this.gender = gender;
-//        this.email = email;
-//        this.addr = addr;
-//        this.tel = tel;
-//        this.pnumber = pnumber;
-//        this.hobbyList = hobbyList;
-//        this.intro = intro;
-//        this.grade = grade;
-//        this.lists = lists;
-//    }
+    @Builder
+    public Member (String id, String password, String name, String gender,
+                String email, String addr, String tel, String pnumber,
+                String hobbyList, String intro, String grade) {
+        this.id = id;
+        this.password = password;
+        this.name = name;
+        this.gender = gender;
+        this.email = email;
+        this.addr = addr;
+        this.tel = tel;
+        this.pnumber = pnumber;
+        this.hobbyList = hobbyList;
+        this.intro = intro;
+        this.grade = grade;
+    }
 
 }

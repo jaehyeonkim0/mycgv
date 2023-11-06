@@ -24,6 +24,7 @@ import java.time.LocalDate;
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 public class Time {
+
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDate createdTime;

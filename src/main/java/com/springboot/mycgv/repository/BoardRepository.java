@@ -1,6 +1,8 @@
 package com.springboot.mycgv.repository;
 
 import com.springboot.mycgv.model.Board;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -13,5 +15,9 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     @Modifying
     @Query(value = "UPDATE Board b SET b.bhits = b.bhits + 1 WHERE b.bid =:bid")
     void updateHits(@Param("bid") Long bid);
+
+    Page<Board> findByBtitleContainingOrBcontentContaining(String btitle, String bcontent, Pageable pageable);
+
+    Board findOneByBid(Long bid);
 
 }

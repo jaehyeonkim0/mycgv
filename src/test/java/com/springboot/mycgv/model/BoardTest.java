@@ -10,16 +10,19 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 class BoardTest {
 
-//    @Test
-//    @DisplayName("게시판 리스트 테스트")
-//    void list() {
-//        Board board = Board.builder()
-//                .bid(1L)
-//                .btitle("hello")
-//                .bcontent("world")
-//                .member(Member.builder().id("test").build())
-//                .build();
-//    }
+    @Test
+    @DisplayName("게시판 리스트 테스트")
+    void list() {
+        for(long i=51; i<100; i++) {
+            Board board = Board.builder()
+                    .bid(i)
+                    .btitle("hello")
+                    .bcontent("world")
+                    .member(Member.builder().id("test").build())
+                    .build();
+        }
+
+    }
 
     @Test
     @DisplayName("JPA ManyToOne Test")

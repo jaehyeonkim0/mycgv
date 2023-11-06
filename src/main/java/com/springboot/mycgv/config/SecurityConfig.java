@@ -31,7 +31,7 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/css/**", "/images/**", "/js/**", "/upload/**").permitAll()
-                .antMatchers("/","/signup","/join", "/login","/board_list", "/board_content/**").permitAll()
+                .antMatchers("/","/signup","/join", "/login","/board_list/**", "/board_content2/**", "/comment/save").permitAll()
                 .anyRequest().authenticated()
                 .and()
         .formLogin()                            //폼 기반 로그인을 사용하도록 설정

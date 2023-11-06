@@ -4,7 +4,12 @@ import com.springboot.mycgv.dto.BoardDto;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 //얘가 연관관계 주인
+/**
+ * 연관관계 주인
+ * */
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -32,22 +37,27 @@ public class Board extends Time {
     private int bhits;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MEMBER_ID")
+    @JoinColumn(name = "member_id")
     private Member member;
 
-    private String bfile;
-    private String bsfile;
+    @Column
+    private int fileAttached; // 1(파일 있음) or 0(파일 없음)
+
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
+    List<BoardFile> boardFileList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Comment> commentEntityList = new ArrayList<>();
 
     @Builder
     public Board (Long bid, String btitle, String bcontent, int bhits,
-                 Member member, String bfile, String bsfile) {
+                 Member member, int fileAttached) {
         this.bid = bid;
         this.btitle = btitle;
         this.bcontent = bcontent;
         this.bhits = bhits;
         this.member = member;
-        this.bfile = bfile;
-        this.bsfile = bsfile;
+        this.fileAttached = fileAttached;
     }
 
     public static Board toUpdateEntity(BoardDto boardDto) {
@@ -56,10 +66,21 @@ public class Board extends Time {
                 .btitle(boardDto.getBtitle())
                 .bcontent(boardDto.getBcontent())
                 .bhits(boardDto.getBhits())
-                .member(Member.builder().id(boardDto.getId()).build())
+                .member(boardDto.getMember())
+                .fileAttached(0)
                 .build();
         return board;
     }
 
-
+    public static Board toUpdateFileEntity(BoardDto boardDto) {
+        Board board = Board.builder()
+                .bid(boardDto.getBid())
+                .btitle(boardDto.getBtitle())
+                .bcontent(boardDto.getBcontent())
+                .bhits(boardDto.getBhits())
+                .member(boardDto.getMember())
+                .fileAttached(1)
+                .build();
+        return board;
+    }
 }

@@ -13,35 +13,31 @@
 	<header>
 		<div class="header_menu">
 			<nav class="nav1">
-				<c:choose>
-				<c:when test="${empty pageContext.request.remoteUser}">
+				<c:if test="${sessionScope.loginUser.name == null}">
 					<ul>
 						<li><a href="http://localhost:9005/login">로그인</a></li>
 						<li><a href="http://localhost:9005/join">회원가입</a></li>
 						<li><a href="http://localhost:9005/mypage">마이페이지</a></li>
-						<li><a href="#">VIP</a></li>
 						<li><a href="#">고객센터</a></li>
 						<li><a href="http://localhost:9005/notice_list/1/">공지사항</a></li>
-						<li><a href="http://localhost:9005/board_list">게시판</a></li>
+						<li><a href="http://localhost:9005/board_list?page=0">게시판</a></li>
 					</ul>
-				</c:when>
-				<c:otherwise>
+				</c:if>
+				<c:if test="${sessionScope.loginUser.name != null}">
 					<ul>
-						<li>${pageContext.request.remoteUser}님 반갑습니다</li>
+						<li class="LoginUserName">${sessionScope.loginUser.name}님 반갑습니다</li>
 						<li><a href="http://localhost:9005/logout">로그아웃</a></li>
 						<li><a href="http://localhost:9005/mypage">마이페이지</a></li>
-						<li><a href="#">VIP</a></li>
 						<li><a href="#">고객센터</a></li>
 						<li><a href="http://localhost:9005/notice_list/1/">공지사항</a></li>
 <%--						<li><a href="http://localhost:9005/board_list/1/">게시판</a></li>--%>
-						<li><a href="http://localhost:9005/board_list">게시판</a></li>
+						<li><a href="http://localhost:9005/board_list?page=0">게시판</a></li>
 						<li><a href="http://localhost:9005/board_list_json">게시판(JSON)</a></li>
-						<c:if test="${pageContext.request.remoteUser == 'admin' }">
+						<c:if test="${sessionScope.loginUser.id == 'admin' }">
 							<li id="admin-menu"><a href="http://localhost:9005/admin/index">ADMIN</a></li>
 						</c:if>
 					</ul>
-				</c:otherwise>
-				</c:choose>
+				</c:if>
 			</nav>
 			<div>
 				<a href="http://localhost:9005/">

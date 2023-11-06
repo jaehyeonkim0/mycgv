@@ -61,7 +61,7 @@
 				<c:forEach var="board" items="${board }">
 					<tr>
 						<td>${board.bid}</td>
-						<td><a href="/board_content2/${board.bid }/${list.pageable.pageNumber}&searchText=${param.searchText}">${board.btitle }</a></td>
+						<td><a href="/board_content2/${board.bid }/${page.reqPage}&searchText=${param.searchText}">${board.btitle }</a></td>
 						<td>${board.bhits }</td>
 						<td>${board.id }</td>
 						<td>${board.boardUpdatedTime != null ? board.boardUpdatedTime : board.boardCreatedTime}</td>
@@ -86,17 +86,17 @@
 			</table>
 			<nav aria-label="Page navigation example">
 				<ul class="pagination justify-content-center">
-					<li class="page-item ${list.pageable.pageNumber + 1 eq 1 ? 'disabled' : ''}">
-						<a class="page-link" href="/board_list?page=${list.pageable.pageNumber - 1}&searchText=${param.searchText}">Previous</a>
+					<li class="page-item ${page.reqPage + 1 eq 1 ? 'disabled' : ''}">
+						<a class="page-link" href="/board_list?page=${page.reqPage - 1}&searchText=${param.searchText}">Previous</a>
 					</li>
-					<c:forEach var="i" begin="${startPage}" end="${endPage}" step="1">
-						<c:set var="isDisabled" value="${i eq list.pageable.pageNumber + 1}" />
+					<c:forEach var="i" begin="${page.startPage}" end="${page.endPage}" step="1">
+						<c:set var="isDisabled" value="${i eq page.reqPage + 1}" />
 							<li class="page-item ${isDisabled ? 'disabled' : ''}">
 								<a class="page-link" href="/board_list?page=${i-1}&searchText=${param.searchText}">${i}</a>
 							</li>
 					</c:forEach>
-					<li class="page-item ${list.pageable.pageNumber + 1 eq list.totalPages ? 'disabled' : ''}">
-						<a class="page-link" href="/board_list?page=${list.pageable.pageNumber + 1}&searchText=${param.searchText}">Next</a>
+					<li class="page-item ${page.reqPage + 1 eq page.totalPage ? 'disabled' : ''}">
+						<a class="page-link" href="/board_list?page=${page.reqPage + 1}&searchText=${param.searchText}">Next</a>
 					</li>
 				</ul>
 			</nav>

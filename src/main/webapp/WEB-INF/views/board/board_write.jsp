@@ -7,6 +7,11 @@
 <title>MYCGV</title>
 <link rel="stylesheet" href="http://localhost:9005/css/mycgv_jsp.css">
 <script src="http://localhost:9005/js/jquery-3.6.4.min.js"></script>
+<script>
+	function fn_addFile(){
+		$("#d_file").append("<br>" + "<input type='file' name='boardDtoFile1' />");
+	}
+</script>
 </head>
 <body>
 	<!-- header -->
@@ -33,17 +38,23 @@
 							<textarea rows="5" cols="30" name="bcontent">${valid_bcontent}</textarea>
 						</td>
 					</tr>
-					<tr>
-						<th>작성자</th>
-						<td>
-							<input type="text" name="id" value="${member_id}" disabled>
-							<input type="hidden" name="id" value="${member_id}">
-						</td>
-					</tr>
+<%--					<tr>--%>
+<%--						<th>작성자</th>--%>
+<%--						<td>--%>
+<%--							<input type="text" name="id" value="${member_id}" disabled>--%>
+<%--							<input type="hidden" name="id" value="${member_id}">--%>
+<%--						</td>--%>
+<%--					</tr>--%>
+<%--					<tr>--%>
+<%--						<th>업로드</th>--%>
+<%--						<td>--%>
+<%--							<input type="file" name="boardDtoFile" >--%>
+<%--						</td>--%>
+<%--					</tr>--%>
 					<tr>
 						<th>업로드</th>
 						<td>
-							<input type="file" name="file1" >
+							<input type="file" name="boardDtoFile1" multiple>
 						</td>
 					</tr>
 					<tr>
