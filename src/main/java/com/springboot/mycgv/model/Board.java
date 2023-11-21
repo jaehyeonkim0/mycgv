@@ -1,15 +1,11 @@
 package com.springboot.mycgv.model;
 
-import com.springboot.mycgv.dto.BoardDto;
 import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-//얘가 연관관계 주인
-/**
- * 연관관계 주인
- * */
+
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -18,8 +14,8 @@ import java.util.List;
         sequenceName = "SEQU_MYCGV_BOARD", // 매핑할 데이터베이스 시퀀스 이름
         initialValue = 1,
         allocationSize = 1)
-@Table(name = "MYCGV_BOARD")
-@ToString(exclude = "member")
+@Table(name = "mycgv_board")
+@ToString(exclude = {"member", "commentEntityList", "boardImageList"})
 public class Board extends Time {
 
     @Id
@@ -44,10 +40,10 @@ public class Board extends Time {
     private int fileAttached; // 1(파일 있음) or 0(파일 없음)
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
-    List<BoardFile> boardFileList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Comment> commentEntityList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "board", cascade = {CascadeType.ALL}, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<BoardImage> boardImageList = new ArrayList<>();
 
     @Builder
     public Board (Long bid, String btitle, String bcontent, int bhits,
@@ -60,27 +56,30 @@ public class Board extends Time {
         this.fileAttached = fileAttached;
     }
 
-    public static Board toUpdateEntity(BoardDto boardDto) {
-        Board board = Board.builder()
-                .bid(boardDto.getBid())
-                .btitle(boardDto.getBtitle())
-                .bcontent(boardDto.getBcontent())
-                .bhits(boardDto.getBhits())
-                .member(boardDto.getMember())
-                .fileAttached(0)
+    public void addImage(String uuid, String originalImageName) {
+        BoardImage boardImage = BoardImage.builder()
+                .uuid(uuid)
+                .originalImageName(originalImageName)
+                .storedImageName(uuid + "_" + originalImageName)
+                .board(this)
+                .fileOrder(boardImageList.size())
                 .build();
-        return board;
+        boardImageList.add(boardImage);
     }
 
-    public static Board toUpdateFileEntity(BoardDto boardDto) {
-        Board board = Board.builder()
-                .bid(boardDto.getBid())
-                .btitle(boardDto.getBtitle())
-                .bcontent(boardDto.getBcontent())
-                .bhits(boardDto.getBhits())
-                .member(boardDto.getMember())
-                .fileAttached(1)
-                .build();
-        return board;
+    public void clearImage() {
+
+        boardImageList.forEach(boardImage -> boardImage.changeBoard(null));
+
+        this.boardImageList.clear();
     }
+
+    public void clearComment() {
+
+        commentEntityList.forEach(comment -> comment.changeComment(null));
+
+        this.commentEntityList.clear();
+
+    }
+
 }

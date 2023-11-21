@@ -11,7 +11,7 @@ import java.util.List;
 
 @Getter
 @Entity
-@Table(name = "MYCGV_MEMBER")
+@Table(name = "mycgv_member")
 @NoArgsConstructor(access = AccessLevel.PROTECTED) //해당 클래스의 기본 생성자를 생성해 주는 어노테이션
 public class Member extends Time {
 

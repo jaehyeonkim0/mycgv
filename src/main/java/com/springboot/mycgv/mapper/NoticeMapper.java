@@ -1,4 +1,4 @@
-package com.springboot.mycgv.repository;
+package com.springboot.mycgv.mapper;
 
 import com.springboot.mycgv.dto.NoticeDto;
 import com.springboot.mycgv.dto.PageDto;

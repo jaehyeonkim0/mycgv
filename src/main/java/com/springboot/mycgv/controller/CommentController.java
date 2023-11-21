@@ -11,7 +11,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,21 +27,9 @@ import java.util.List;
 public class CommentController {
 
     private final CommentService commentService;
-//    @PostMapping("/save")
-//    public ResponseEntity save(@ModelAttribute CommentDto commentDto) {
-//        System.out.println("commentDto = " + commentDto);
-//        Long saveResult = commentService.save(commentDto);
-//        if (saveResult != null) {
-//            List<CommentDto> commentDtoList = commentService.findAll(commentDto.getBid());
-//            return new ResponseEntity<>(commentDtoList, HttpStatus.OK);
-//        } else {
-//            return new ResponseEntity<>("해당 게시글이 존재하지 않습니다.", HttpStatus.NOT_FOUND);
-//        }
-//    }
 
     @PostMapping("/save")
     public ResponseEntity save(@Valid @ModelAttribute CommentDto commentDto,
-                               Errors errors,
                                @PageableDefault(size = 5, sort = "cid",
                                        direction = Sort.Direction.DESC) Pageable pageable) {
 
@@ -53,12 +40,7 @@ public class CommentController {
 
             List<CommentDto> commentDtoList = new ArrayList<>();
             for(Comment comment : commentList) {
-                CommentDto commentDto1 = new CommentDto();
-                commentDto1.setCid(comment.getCid());
-                commentDto1.setCommentWriter(comment.getCommentWriter());
-                commentDto1.setCommentContents(comment.getCommentContents());
-                commentDto1.setBid(comment.getBoard().getBid());
-                commentDto1.setCommentCreatedTime(comment.getCreatedTime());
+                CommentDto commentDto1 = CommentDto.toCommentDTO(comment, commentDto.getBid());
 
                 commentDtoList.add(commentDto1);
             }
@@ -67,9 +49,5 @@ public class CommentController {
             return new ResponseEntity<>("해당 게시글이 존재하지 않습니다.", HttpStatus.NOT_FOUND);
         }
     }
-
-
-
-
 
 }

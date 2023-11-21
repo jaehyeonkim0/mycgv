@@ -46,7 +46,6 @@ public class MemberDto {
     private String[] hobby;
 
 
-
     public String getAddr() {
         if (addr1 != null) {
             addr = addr1 + addr2;

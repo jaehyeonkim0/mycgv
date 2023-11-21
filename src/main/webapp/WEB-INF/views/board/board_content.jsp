@@ -8,6 +8,15 @@
 <title>MYCGV</title>
 <link rel="stylesheet" href="/css/mycgv_jsp.css">
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<style>
+	.btn {
+		display: none;
+	}
+	.uploadImage {
+		width: 150px;
+		height: 150px;
+	}
+</style>
 <script src="http://localhost:9005/js/jquery-3.6.4.min.js"></script>
 </head>
 <body>
@@ -26,9 +35,9 @@
 				<tr>
 					<th>내용</th>
 					<td>
-					<c:if test="${board.fileAttached == 1 }">
-						<c:forEach var="file" items="${board.saveFileName1}">
-								<img src="/upload/${file }">
+					<c:if test="${board.fileAttached == 1}">
+						<c:forEach var="file" items="${board.storedImageNameList}">
+								<img src="/upload/${file }" class="uploadImage">
 						</c:forEach>
 					</c:if><br>
 						${board.bcontent }<br><br><br>
@@ -50,7 +59,7 @@
 					<td colspan="2">
 						<c:choose>
 							<c:when test="${sessionScope.loginUser.id == board.id}">
-								<a href="/board_update/${board.bid }">
+								<a href="/board_update/${board.bid }/${page}">
 									<button type="button" class="btn_style">수정하기</button></a>
 								<a href="/board_delete/${board.bid }">
 									<button type="button" class="btn_style">삭제하기</button></a>
@@ -69,29 +78,72 @@
 					</td>
 				</tr>
 			</table>
-			<div id="comment-write">
-<%--				<input type="text" id="commentWriter" placeholder="작성자">--%>
-				<input type="text" id="commentContents" placeholder="내용">
-				<button id="comment-write-btn" onclick="commentWrite()">댓글작성</button>
-			</div>
+		</section>
 
-			<div id="comment-list" class="comment-list">
-				<table>
-					<tr></tr>
-					<tr>
-						<th>작성자</th>
-						<th>내용</th>
-						<th>작성시간</th>
-					</tr>
-					<c:forEach var="comment" items="${commentList}">
-						<tr>
-							<td>${comment.commentWriter}</td>
-							<td>${comment.commentContents}</td>
-							<td>${comment.commentCreatedTime}</td>
-						</tr>
-					</c:forEach>
-				</table>
+		<section class="commentWrite">
+			<h3 class="comments-title2">Comments</h3>
+			<div class="form-block">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group">
+							<textarea class="form-input" id="commentContents"></textarea>
+							<c:choose>
+								<c:when test="${sessionScope.loginUser.id != null}">
+									<input type="hidden" name="id" id="id" value="${sessionScope.loginUser.id}">
+								</c:when>
+								<c:otherwise>
+									<input type="hidden" name="id" id="id" value="">
+								</c:otherwise>
+							</c:choose>
+						</div>
+						<button class="btn btn-primary pull-right" id="comment-insert">입력</button>
+					</div>
+				</div>
 			</div>
+		</section>
+		<!-- 댓글 출력 부분 -->
+		<section class="commentList">
+			<div id="comment-start-section">
+				<div class="be-comment-block">
+					<c:forEach var="comment" items="${commentDtoList}">
+						<div class="be-comment">
+							<div class="be-img-comment">
+								<a href="blog-detail-2.html">
+									<img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" class="be-ava-comment">
+								</a>
+							</div>
+							<div class="be-comment-content">
+								<span class="be-comment-name">
+									${comment.commentWriter}
+								</span>
+								<span class="be-comment-time">
+									<i class="fa fa-clock-o"></i>
+									${comment.commentCreatedTime}
+								</span>
+								<p class="be-comment-text">
+									${comment.commentContents}
+								</p>
+							</div>
+						</div>
+					</c:forEach>
+				</div>
+			</div>
+			<nav aria-label="Page navigation example">
+				<ul class="pagination justify-content-center">
+					<li class="page-item ${page2.reqPage + 1 eq 1 ? 'disabled' : ''}">
+						<a class="page-link" href="/board_content2?page=${page2.reqPage - 1}&searchText=${param.searchText}">Previous</a>
+					</li>
+					<c:forEach var="i" begin="${page2.startPage}" end="${page2.endPage}" step="1">
+						<c:set var="isDisabled" value="${i eq page2.reqPage + 1}" />
+						<li class="page-item ${isDisabled ? 'disabled' : ''}">
+							<a class="page-link" href="/board_content2?page=${i-1}&searchText=${param.searchText}">${i}</a>
+						</li>
+					</c:forEach>
+					<li class="page-item ${page2.reqPage + 1 eq page2.totalPage ? 'disabled' : ''}">
+						<a class="page-link" href="/board_list?page=${page2.reqPage + 1}&searchText=${param.searchText}">Next</a>
+					</li>
+				</ul>
+			</nav>
 		</section>
 	</div>
 	<!-- footer -->
@@ -100,15 +152,44 @@
 </html>
 <script>
 
+	$(document).ready(function(){
+
+		const textarea = document.getElementById("commentContents");
+		const button = document.getElementById("comment-insert");
+
+		textarea.addEventListener("click", function (event) {
+			button.style.display = "inline-block";
+
+			event.stopPropagation();
+		});
+
+		document.addEventListener("click", function () {
+			button.style.display = "none";
+		});
+
+		$("#comment-insert").click(function(){
+			let loginOrNot = document.getElementById("id").value;
+
+			if (loginOrNot != "") {
+				commentWrite();
+			} else {
+				if (confirm("로그인 후 이용 가능합니다. 로그인 하시겠습니까?")) {
+					location.href = "/login";
+				} else {
+					return false;
+				}
+
+			}
+		});
+	});
+
 	function commentWrite() {
-		const writer = document.getElementById("commentWriter").value;
+		const writer = document.getElementById("id").value;
 		const contents = document.getElementById("commentContents").value;
-		console.log("작성자: ", writer);
-		console.log("내용: ", contents);
 		const bid = ${board.bid};
 		$.ajax({
 			// 요청방식: post, 요청주소: /comment/save, 요청데이터: 작성자, 작성내용, 게시글번호
-			type: "post",
+			type: "POST",
 			url: "/comment/save",
 			data: {
 				"commentWriter": writer,
@@ -117,22 +198,20 @@
 			},
 			success: function (res) {
 				console.log("요청성공", res);
-				let output = "<table>";
-				output += "<tr><th>댓글번호</th>";
-				output += "<th>작성자</th>";
-				output += "<th>내용</th>";
-				output += "<th>작성시간</th></tr>";
+				let output = "<div class='be-comment-block'>";
 				for (let i in res) {
-					output += "<tr>";
-					output += "<td>" + res[i].cid + "</td>";
-					output += "<td>" + res[i].commentWriter + "</td>";
-					output += "<td>" + res[i].commentContents + "</td>";
-					output += "<td>" + res[i].commentCreatedTime + "</td>";
-					output += "</tr>";
+					output += "<div class='be-comment'><div class='be-img-comment'>";
+					output += "<a href='blog-detail-2.html'><img src='https://bootdey.com/img/Content/avatar/avatar1.png' alt='' class='be-ava-comment'></a></div>";
+					output += "<div class='be-comment-content'><span class='be-comment-name'>";
+					output += res[i].commentWriter + "</span><span class='be-comment-time'><i class='fa fa-clock-o'></i>";
+					output += res[i].commentCreatedTime + "</span><p class='be-comment-text'>";
+					output += res[i].commentContents + "</p>";
+					output += "</div></div>";
 				}
-				output += "</table>";
-				document.getElementById('comment-list').innerHTML = output;
-				document.getElementById('commentWriter').value = '';
+				output += "</div>";
+
+				document.getElementById('comment-start-section').innerHTML = output;
+				document.getElementById('id').value = '';
 				document.getElementById('commentContents').value = '';
 			},
 			error: function (err) {
@@ -141,5 +220,4 @@
 		});
 
 	}
-
 </script>

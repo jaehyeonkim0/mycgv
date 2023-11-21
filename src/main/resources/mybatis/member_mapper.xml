@@ -3,7 +3,7 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!--경로 : 인터페이스의 위치; id값(login)의 값이 인터페이스의 메소드 이름과 같아야한다-->
-<mapper namespace="com.springboot.mycgv.repository.MemberMapper">
+<mapper namespace="com.springboot.mycgv.mapper.MemberMapper">
 <!--	<select id="login" parameterType="com.springboot.mycgv.dto.MemberDto" resultType="com.springboot.mycgv.dto.SessionDto">-->
 <!--		select count(*) loginresult, name, id from mycgv_member-->
 <!--		where id=#{id} and pass=#{pass}	group by name, id-->

@@ -1,7 +1,7 @@
 package com.springboot.mycgv.service;
 
 import com.springboot.mycgv.dto.MemberDto;
-import com.springboot.mycgv.repository.MemberMapper;
+import com.springboot.mycgv.mapper.MemberMapper;
 import com.springboot.mycgv.repository.MemberRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

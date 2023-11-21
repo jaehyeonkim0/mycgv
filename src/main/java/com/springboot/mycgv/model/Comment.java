@@ -1,9 +1,6 @@
 package com.springboot.mycgv.model;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -15,8 +12,9 @@ import javax.persistence.*;
         initialValue = 1,
         allocationSize = 1)
 
-@Table(name = "MYCGV_COMMENT")
+@Table(name = "mycgv_comment")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString(exclude = "board")
 public class Comment extends Time {
 
     @Id
@@ -31,7 +29,7 @@ public class Comment extends Time {
     private String commentContents;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "board_id")
+    @JoinColumn(name = "board_bid")
     private Board board;
 
 
@@ -40,6 +38,10 @@ public class Comment extends Time {
         this.cid = cid;
         this.commentWriter = commentWriter;
         this.commentContents = commentContents;
+        this.board = board;
+    }
+
+    public void changeComment(Board board) {
         this.board = board;
     }
 }

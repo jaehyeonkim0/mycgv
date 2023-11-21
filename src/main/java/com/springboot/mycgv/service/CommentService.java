@@ -20,7 +20,7 @@ public class CommentService {
     private final BoardRepository boardRepository;
 
     public Long save(CommentDto commentDto) {
-        /* 부모엔티티(BoardEntity) 조회 */
+        /* 부모엔티티(optionalBoardEntity) 조회 */
         Optional<Board> optionalBoardEntity = boardRepository.findById(commentDto.getBid());
         if (optionalBoardEntity.isPresent()) {
             Board board = optionalBoardEntity.get();
@@ -45,8 +45,6 @@ public class CommentService {
     public Page<Comment> findAll(Long bid, Pageable pageable) {
         Board board = boardRepository.findById(bid).get();
         Page<Comment> commentList = commentRepository.findAllByBoard(board, pageable);
-        /* EntityList -> DTOList */
-
 
         return commentList;
     }

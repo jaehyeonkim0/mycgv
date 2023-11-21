@@ -550,7 +550,7 @@ section.admin div article {
 }
 
 /******************************************************@Valid 적용 후***************************************************************/
-.joinError, .loginError {
+.joinError, .loginError, .boardError {
 	color: red;
 	font-size : 11px;
 	display: block;
@@ -558,6 +558,10 @@ section.admin div article {
 }
 .joinError {
 	padding-top: 8px;
+}
+
+.boardError {
+	padding : 0 0 8px 10px;
 }
 
 .loginError {

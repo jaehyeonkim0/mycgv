@@ -1,7 +1,7 @@
 package com.springboot.mycgv.service;
 
 import com.springboot.mycgv.dto.PageDto;
-import com.springboot.mycgv.repository.PageMapper;
+import com.springboot.mycgv.mapper.PageMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

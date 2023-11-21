@@ -24,7 +24,6 @@ public class CommentDto {
     private Long bid;
 
 
-
     public static CommentDto toCommentDTO(Comment comment, Long bid) {
         CommentDto commentDto = new CommentDto();
         commentDto.setCid(comment.getCid());
@@ -34,7 +33,6 @@ public class CommentDto {
         commentDto.setBid(bid);
         return commentDto;
     }
-
 
     public Comment toEntity(CommentDto commentDto, Board board) {
         Comment comment = Comment.builder()

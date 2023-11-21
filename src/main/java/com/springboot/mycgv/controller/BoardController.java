@@ -7,11 +7,8 @@ import com.springboot.mycgv.dto.PageDto2;
 import com.springboot.mycgv.dto.UserSessionDto;
 import com.springboot.mycgv.model.Board;
 import com.springboot.mycgv.model.Comment;
-import com.springboot.mycgv.service.BoardService;
-import com.springboot.mycgv.service.CommentService;
-import com.springboot.mycgv.service.PageService;
-import com.springboot.mycgv.service.ValidService;
-import lombok.AllArgsConstructor;
+import com.springboot.mycgv.service.*;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,161 +18,108 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Controller
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Slf4j
 public class BoardController {
-    //Controller에서는 Dto를 받고 Service에서 Dto -> Entity 변환
-    //Repository에서 가져올 땐 대부분이 Entity 타입인데
-    //Service에서는 Entity -> Dto 변환하여 Controller로 넘겨줌
 
-    private BoardService boardService;
-    private PageService pageService;
-//    private FileUploadService fileUploadService;
-    private ValidService validService;
-    private CommentService commentService;
+    private final BoardService boardService;
+    private final PageService pageService;
+    private final CommentService commentService;
+    private final ValidService validService;
+    private final FileUploadService fileUploadService;
 
-//    @GetMapping("board_write")
-//    public String board_wirte(Authentication authentication, Model model) {
-//        model.addAttribute("member_id", authentication.getName());
-//        return "board/board_write";
-//    }
-
-//    @GetMapping("board_write")
-//    public String board_wirte(@LoginedUser UserSessionDto userSessionDto, Model model) {
-//        model.addAttribute("member_id", userSessionDto.getId());
-//        return "board/board_write";
-//    }
-
+    /**
+     * 게시물 작성 페이지
+     * @return 게시물 작성 VIEW
+     */
     @GetMapping("board_write")
     public String board_wirte() {
         return "board/board_write";
     }
 
-//    @GetMapping("/board_list")
-//    public String board_list(Model model) {
-//        List<BoardDto> list = boardService.list();
-//        model.addAttribute("list", list);
-//        return "board/board_list2";
-//    }
-
-//    @PostMapping("board_write")
-//    public String board_write_proc(@Valid @ModelAttribute BoardDto boardDto,
-//                                   Errors errors, Model model) throws IOException {
-////        if (errors.hasErrors()) {
-////            /* 회원가입 실패시 입력 데이터 유지 : @ModelAttribute MemberDto memberDto */
-////            Map<String, String> validateResult = validService.validateHandler(errors);
-////            // map.keySet() -> 모든 key값을 갖고온다.
-////            // 그 갖고온 키로 반복문을 통해 키와 에러 메세지로 매핑
-////            for (String key : validateResult.keySet()) {
-////                // ex) model.addAtrribute("valid_id", "아이디는 필수 입력사항 입니다.")
-////                model.addAttribute(key, validateResult.get(key));
-////            }
-////            return "board/board_write";
-////        }else {
-////            boardService.insert(boardDto);
-////        }
-//
-//        boardService.insert(boardDto, boardDto.getId());
-//        return "redirect:/board_list";
-//    }
-
-
-//    @PostMapping("board_write")
-//    public String board_write_proc(@Valid @ModelAttribute BoardDto boardDto,
-//                                   @LoginedUser UserSessionDto userSessionDto,
-//                                   Errors errors, Model model) throws IOException {
-////        if (errors.hasErrors()) {
-////            /* 회원가입 실패시 입력 데이터 유지 : @ModelAttribute MemberDto memberDto */
-////            Map<String, String> validateResult = validService.validateHandler(errors);
-////            // map.keySet() -> 모든 key값을 갖고온다.
-////            // 그 갖고온 키로 반복문을 통해 키와 에러 메세지로 매핑
-////            for (String key : validateResult.keySet()) {
-////                // ex) model.addAtrribute("valid_id", "아이디는 필수 입력사항 입니다.")
-////                model.addAttribute(key, validateResult.get(key));
-////            }
-////            return "board/board_write";
-////        }else {
-////            boardService.insert(boardDto);
-////        }
-//        boardDto.setId(userSessionDto.getId());
-//        boardService.insert(boardDto);
-//        return "redirect:/board_list";
-//    }
-
-
+    /**
+     * 게시물 작성
+     * @param userSessionDto 로그인 사용자 정보
+     * @param boardDto 게시물 제목, 내용, 파일
+     * @param errors 유효성 체크 시, 발생 가능한 에러
+     * @param model
+     * @return 게시판 리스트 VIEW
+     * @throws IOException
+     */
     @PostMapping("board_write")
-    public String board_write_proc1(@LoginedUser UserSessionDto userSessionDto,
-                                    @Valid @ModelAttribute BoardDto boardDto,
-                                    Errors errors, Model model) throws IOException {
+    public String board_write_proc(@LoginedUser UserSessionDto userSessionDto,
+                                   @Valid @ModelAttribute BoardDto boardDto,
+                                   Errors errors, Model model) throws IOException {
         boardDto.setId(userSessionDto.getId());
-        boardService.multipleInsert(boardDto);
 
+        if (errors.hasErrors()) {
+            Map<String, String> validateResult = validService.validateHandler(errors);
+            for (String key : validateResult.keySet()) {
+                model.addAttribute(key, validateResult.get(key));
+            }
+            return "board/board_write";
+        }else {
+            boardService.saveBoard(boardDto);
+        }
         return "redirect:/board_list";
-//        if (errors.hasErrors()) {
-//            /* 회원가입 실패시 입력 데이터 유지 : @ModelAttribute MemberDto memberDto */
-//            Map<String, String> validateResult = validService.validateHandler(errors);
-//            // map.keySet() -> 모든 key값을 갖고온다.
-//            // 그 갖고온 키로 반복문을 통해 키와 에러 메세지로 매핑
-//            for (String key : validateResult.keySet()) {
-//                // ex) model.addAtrribute("valid_id", "아이디는 필수 입력사항 입니다.")
-//                model.addAttribute(key, validateResult.get(key));
-//            }
-//            return "board/board_write";
-//        }else {
-//            boardService.insert(boardDto);
-//        }
-
     }
 
-//    @GetMapping("board_content/{bid}/{page}")
-//    public String board_content(Model model,
-//                                @PathVariable Long bid,
-//                                @PathVariable(required = false) String page,
-//                                @RequestParam(required = false, defaultValue = "") String searchText) {
-////        log.info("접속한 유저 정보 = {}", userSessionDto.getId());
-//        boardService.updateHits(bid);
-//        model.addAttribute("board", boardService.content(bid));
-//        model.addAttribute("page", page);
-//        model.addAttribute("searchText", searchText);
-//
-//        return "board/board_content";
-//    }
+    /**
+     * 게시판 리스트
+     * @param model
+     * @param pageable 페이징 정보
+     * @param searchText 검색 키워드
+     * @return 게시판 리스트 VIEW
+     */
+    @GetMapping("/board_list")
+    public String board_list(Model model,
+                             @PageableDefault(size = 5, sort = "bid", direction = Sort.Direction.DESC) Pageable pageable,
+                             @RequestParam(required = false, defaultValue = "") String searchText) {
 
-//    @GetMapping("board_content2/{bid}/{page}")
-//    public String board_content(Model model,
-//                                @PathVariable Long bid,
-//                                @PathVariable(required = false) String page,
-//                                @RequestParam(required = false, defaultValue = "") String searchText,
-//                                @LoginedUser UserSessionDto userSessionDto) {
-////        log.info("접속한 유저 정보 = {}", userSessionDto.getId());
-//        boardService.updateHits(bid);
-//        List<CommentDto> commentDtoList = commentService.findAll(bid);
-//
-//        model.addAttribute("user", userSessionDto);
-//        model.addAttribute("commentList", commentDtoList);
-//        model.addAttribute("board", boardService.multipleContent(bid));
-//        model.addAttribute("page", page);
-//        model.addAttribute("searchText", searchText);
-//
-//        return "board/board_content2";
-//    }
+        Page<Board> list = boardService.listBoard(pageable, searchText);
 
-    @GetMapping("board_content2/{bid}/{page}")
+        PageDto2 pageDto2 = PageDto2.toPageDto(list);
+        List<BoardDto> boardDtoList = new ArrayList<>();
+        for(Board board : list) {
+            boardDtoList.add(BoardDto.toDetailBoardDto(board));
+        }
+
+        int startBlockPage = (pageDto2.getReqPage()/5) * 5 + 1; // 1
+        int endBlockPage = startBlockPage + 5 - 1; //5
+        endBlockPage = pageDto2.getTotalPage() < endBlockPage ? pageDto2.getTotalPage() : endBlockPage;
+
+        model.addAttribute("startBlockPage", startBlockPage);
+        model.addAttribute("endBlockPage", endBlockPage);
+        model.addAttribute("page", pageDto2);
+        model.addAttribute("board", boardDtoList);
+
+        return "board/board_list";
+    }
+
+    /**
+     * 게시물 상세보기
+     * @param model
+     * @param bid 게시물 ID
+     * @param page 게시판 리스트 페이징 현재 페이지 정보
+     * @param searchText 게시판 검색 키워드
+     * @param pageable 페이징 인터페이스
+     * @return 게시판 상세 페이지 VIEW
+     */
+    @GetMapping("board_content/{bid}/{page}")
     public String board_content(Model model,
                                 @PathVariable Long bid,
                                 @PathVariable(required = false) String page,
                                 @RequestParam(required = false, defaultValue = "") String searchText,
                                 @PageableDefault(size = 5, sort = "cid",
                                         direction = Sort.Direction.DESC) Pageable pageable) {
-//        log.info("접속한 유저 정보 = {}", userSessionDto.getId());
         boardService.updateHits(bid);
         Page<Comment> commentList = commentService.findAll(bid, pageable);
 
@@ -184,112 +128,72 @@ public class BoardController {
             commentDtoList.add(CommentDto.toCommentDTO(comment, bid));
         }
 
-        model.addAttribute("commentList", commentList);
         model.addAttribute("commentDtoList", commentDtoList);
-        model.addAttribute("board", boardService.multipleContent(bid));
+        model.addAttribute("board", boardService.detailBoard(bid));
         model.addAttribute("page", page);
         model.addAttribute("searchText", searchText);
 
-        return "board/board_content2";
+        return "board/board_content";
     }
 
-//    @GetMapping("board_update/{bid}")
-//    public String board_update(Model model, @PathVariable Long bid) {
-//        model.addAttribute("board", boardService.content(bid));
-//        return "board/board_update";
-//
-//    }
-
-    @GetMapping("board_update/{bid}")
-    public String board_update(Model model, @PathVariable Long bid) {
-        model.addAttribute("board", boardService.multipleContent(bid));
+    /**
+     * 게시물 수정 페이지
+     * @param model
+     * @param bid 게시물 ID
+     * @param page 게시판 리스트 페이징 현재 페이지 정보
+     * @return 게시물 수정 VIEW
+     */
+    @GetMapping("board_update/{bid}/{page}")
+    public String board_update(Model model, @PathVariable Long bid,
+                               @PathVariable(required = false) String page) {
+        model.addAttribute("board", boardService.detailBoard(bid));
         return "board/board_update";
     }
 
-//    @PostMapping("board_update")
-//    public String board_update_proc(BoardDto boardDto, Model model) throws IOException {
-//        BoardDto updateBoardDto = boardService.update(boardDto);
-//        model.addAttribute("board", updateBoardDto);
-//
-//        return "board/board_content";
-//    }
-
-//    @PostMapping("board_update")
-//    public String board_update_proc(BoardDto boardDto, Model model) throws IOException {
-//        boardService.update(boardDto);
-//
-//        return "redirect:/board_list";
-//    }
-
+    /**
+     * 게시물 수정
+     * @param boardDto 게시물 정보
+     * @param model
+     * @return 게시판 리스트 VIEW
+     * @throws IOException
+     */
     @PostMapping("board_update")
     public String board_update_proc(BoardDto boardDto, Model model) throws IOException {
-        boardService.multipleUpdate(boardDto);
-
+        boardService.modifyBoard(boardDto);
         return "redirect:/board_list";
     }
 
-//    @GetMapping("/board_list")
-//    public String board_list(Model model, @PageableDefault(size = 5) Pageable pageable) {
-//        Page<Board> list = boardService.list(pageable);
-//
-//        int startPage = Math.max(1, list.getPageable().getPageNumber() - 4);
-//        int endPage = Math.min(list.getTotalPages(), list.getPageable().getPageNumber() + 4);
-//
-//        model.addAttribute("startPage", startPage);
-//        model.addAttribute("endPage", endPage);
-//        model.addAttribute("list", list);
-//        return "board/board_list2";
-//    }
-
-
-//    @GetMapping("/board_list")
-//    public String board_list(Model model,
-//                             @PageableDefault(size = 5, sort = "bid",
-//                             direction = Sort.Direction.DESC) Pageable pageable) {
-//        Page<Board> list = boardService.list(pageable);
-//
-//        List<BoardDto> boardDtoList = new ArrayList<>();
-//        for(Board board : list) {
-//            boardDtoList.add(BoardDto.toBoardDto(board));
-//        }
-//
-//        int startPage = Math.max(1, list.getPageable().getPageNumber() - 5);
-//        int endPage = Math.min(list.getTotalPages(), list.getPageable().getPageNumber() + 5);
-//
-//        model.addAttribute("startPage", 1);
-//        model.addAttribute("endPage", endPage);
-//        model.addAttribute("list", list);
-//        model.addAttribute("board", boardDtoList);
-//
-//        return "board/board_list2";
-//    }
-
-    @GetMapping("/board_list")
-    public String board_list(Model model,
-                             @PageableDefault(size = 5, sort = "bid", direction = Sort.Direction.DESC) Pageable pageable,
-                             @RequestParam(required = false, defaultValue = "") String searchText) {
-
-        Page<Board> list = boardService.list(pageable, searchText);
-
-        PageDto2 pageDto2 = PageDto2.toPageDto(list);
-        List<BoardDto> boardDtoList = new ArrayList<>();
-        for(Board board : list) {
-            boardDtoList.add(BoardDto.toMultipleFileBoardDto(board));
-        }
-
-        model.addAttribute("page", pageDto2);
-        model.addAttribute("board", boardDtoList);
-
-        return "board/board_list3";
-    }
-
+    /**
+     * 게시판 삭제
+     * @param bid 게시판 ID
+     * @return 게시판 리스트 VIEW
+     */
     @GetMapping("/board_delete/{bid}")
-    public String delete(@PathVariable Long bid) {
-        boardService.delete(bid);
+    public String delete(@PathVariable Long bid) throws IOException{
+        boardService.deleteBoard(bid);
         return "redirect:/board_list";
     }
 
-    /***----------------------------------------------------------------------------------------------------*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //    @Autowired
 //    public BoardController(BoardService boardService, PageService pageService,
@@ -364,12 +268,12 @@ public class BoardController {
 //        return "redirect:/board_list";
 //    }
 
-    @GetMapping("board_delete/{bid}/{page}")
-    public String board_delete(@PathVariable String page, @PathVariable String bid, Model model) {
-        model.addAttribute("bid", bid);
-        model.addAttribute("page", page);
-        return "board/board_delete";
-    }
+//    @GetMapping("board_delete/{bid}/{page}")
+//    public String board_delete(@PathVariable String page, @PathVariable String bid, Model model) {
+//        model.addAttribute("bid", bid);
+//        model.addAttribute("page", page);
+//        return "board/board_delete";
+//    }
 
 //    @PostMapping("board_delete")
 //    public String board_delete_proc(BoardDto boardDto) throws Exception {
@@ -383,10 +287,10 @@ public class BoardController {
 //        return "redirect:/board_list/"+boardDto.getPage()+"/";
 //    }
 
-    @GetMapping("board_list_json")
-    public String board_list_json(){
-        return "/board/board_list_json";
-    }
+//    @GetMapping("board_list_json")
+//    public String board_list_json(){
+//        return "/board/board_list_json";
+//    }
 
 
 }
