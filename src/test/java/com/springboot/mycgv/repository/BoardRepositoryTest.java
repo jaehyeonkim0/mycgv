@@ -1,7 +1,6 @@
 package com.springboot.mycgv.repository;
 
 import com.springboot.mycgv.model.Board;
-import com.springboot.mycgv.model.BoardImage;
 import com.springboot.mycgv.model.Member;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.DisplayName;
@@ -68,16 +67,23 @@ class BoardRepositoryTest {
     @Test
     public void testReadImages() {
 
+
+        long startTime = System.currentTimeMillis();
+
         Optional<Board> result = boardRepository.findByIdWithBoardImage(42L);
 
         Board board = result.orElseThrow();
 
-        log.info(board);
-        log.info("-------------------------------------------------");
+        log.info("Response Time = {}ms board = {}",
+                (System.currentTimeMillis()-startTime), board);
 
-        for (BoardImage boardImage : board.getBoardImageList()) {
-            log.info(boardImage);
-        }
+
+//        log.info(board);
+//        log.info("-------------------------------------------------");
+//
+//        for (BoardImage boardImage : board.getBoardImageList()) {
+//            log.info(boardImage);
+//        }
 
 
     }

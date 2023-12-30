@@ -1,7 +1,7 @@
 package com.springboot.mycgv.config;
 
-import com.springboot.mycgv.dto.UserSessionDto;
 import com.springboot.mycgv.model.SessionUser;
+import com.springboot.mycgv.security.dto.MemberSecurityDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
@@ -31,7 +31,9 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
         //parameter.getParameterType()을 사용하여 매개변수의 타입을 가져온 다음,
         //이 타입이 UserSessionDto.class와 같은지 확인합니다.
         //만약 해당되면 isUserClass 변수에 true를 할당하고, 그렇지 않으면 false를 할당합니다.
-        boolean isUserClass = UserSessionDto.class.equals(parameter.getParameterType());
+//        boolean isUserClass = UserSessionDto.class.equals(parameter.getParameterType());
+
+        boolean isUserClass = MemberSecurityDTO.class.equals(parameter.getParameterType());
 
         return isLoginedUserAnnotation && isUserClass;
     }

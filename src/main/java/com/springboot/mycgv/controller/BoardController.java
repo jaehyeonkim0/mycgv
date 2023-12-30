@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -40,6 +41,7 @@ public class BoardController {
      * 게시물 작성 페이지
      * @return 게시물 작성 VIEW
      */
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("board_write")
     public String board_wirte() {
         return "board/board_write";
@@ -55,10 +57,8 @@ public class BoardController {
      * @throws IOException
      */
     @PostMapping("board_write")
-    public String board_write_proc(@LoginedUser UserSessionDto userSessionDto,
-                                   @Valid @ModelAttribute BoardDto boardDto,
+    public String board_write_proc(@Valid @ModelAttribute BoardDto boardDto,
                                    Errors errors, Model model) throws IOException {
-        boardDto.setId(userSessionDto.getId());
 
         if (errors.hasErrors()) {
             Map<String, String> validateResult = validService.validateHandler(errors);
@@ -113,6 +113,7 @@ public class BoardController {
      * @param pageable 페이징 인터페이스
      * @return 게시판 상세 페이지 VIEW
      */
+//    @PreAuthorize("isAuthenticated()")
     @GetMapping("board_content/{bid}/{page}")
     public String board_content(Model model,
                                 @PathVariable Long bid,
@@ -157,6 +158,7 @@ public class BoardController {
      * @return 게시판 리스트 VIEW
      * @throws IOException
      */
+//    @PreAuthorize("principal.username == #boardDto.member.id")
     @PostMapping("board_update")
     public String board_update_proc(BoardDto boardDto, Model model) throws IOException {
         boardService.modifyBoard(boardDto);

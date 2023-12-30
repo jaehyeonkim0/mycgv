@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -38,6 +39,13 @@
 						<th>업로드</th>
 						<td>
 							<input type="file" name="boardImages" multiple>
+						</td>
+					</tr>
+					<tr>
+						<th>작성자</th>
+						<sec:authentication property="principal.username" var="username"/>
+						<td>
+							<input type="text" name="id" readonly value="${username}">
 						</td>
 					</tr>
 					<tr>

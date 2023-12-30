@@ -1,15 +1,28 @@
 package com.springboot.mycgv.model;
 
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class CustomUserDetails implements UserDetails {
 
-    private final Member member;
+    private String id;
+    private String password;
+
+    private Member member;
+
+    @Builder
+    public CustomUserDetails(String id, String password) {
+        this.id = id;
+        this.password = password;
+    }
 
     /* 유저의 권한 목록 */
     @Override
@@ -19,12 +32,12 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return member.getPassword();
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return member.getId();
+        return id;
     }
 
     /** 계정 만료 여부

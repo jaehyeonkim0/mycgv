@@ -27,9 +27,11 @@ public abstract class CustomValidator<T> implements Validator {
         }
     }
 
-    //추상 메서드로, 실제 유효성 검사 로직이 구현되어야 할 메소드다.
-    //이 메서드는 자식 클래스에서 반드시 구현되어야한다.
-    //dto는 유효성 검사를 수행할 DTO나 엔터티 객체를 나타내고, errors는 검사 중 발생한 오류를 저장하는 객체다.
+    /**
+     * 추상 메서드로, 실제 유효성 검사 로직이 구현되어야 할 메소드다.
+     * 이 메서드는 자식 클래스에서 반드시 구현되어야한다.
+     * dto는 유효성 검사를 수행할 DTO나 엔터티 객체를 나타내고, errors는 검사 중 발생한 오류를 저장하는 객체다.
+     */
     protected abstract void doValidate(final T dto, final Errors errors);
 
 }

@@ -5,6 +5,8 @@ import com.springboot.mycgv.dto.PageDto;
 import com.springboot.mycgv.service.NoticeService;
 import com.springboot.mycgv.service.PageService;
 import com.springboot.mycgv.service.ValidService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -14,12 +16,13 @@ import javax.validation.Valid;
 import java.util.Map;
 
 @Controller
-@RequestMapping("admin")
+@RequestMapping("/admin")
+@RequiredArgsConstructor
 public class AdminController {
 
-    private PageService pageService;
-    private NoticeService noticeService;
-    private ValidService validService;
+    private final PageService pageService;
+    private final NoticeService noticeService;
+    private final ValidService validService;
 
 //    private FileUploadService fileUploadService;
 
@@ -31,6 +34,7 @@ public class AdminController {
 //        this.validService = validService;
 //        this.fileUploadService = fileUploadService;
 //    }
+
 
     @GetMapping("index")
     public String admin_index() {

@@ -10,8 +10,9 @@
 	<script>
 	let login_result= "${login_result }";
 	if(login_result === "ok"){
-		alert("로그인 성공하셨습니다");	
+		alert("로그인 성공하셨습니다");
 	}
+
 	</script>
 </head>
 <body>
@@ -20,7 +21,7 @@
 		
 	<!-- content -->	
 	<div class="content">
-		<section class="section1">	
+		<section class="section1">
 			<div class="section1_d1">	
 				<img src="http://localhost:9005/images/16347931161070.jpg">
 			</div>

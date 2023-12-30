@@ -22,6 +22,7 @@ public class BoardDto {
 
     private Long bid;
     private String id;
+    private String writer;
     private Member member;
 
     @NotBlank(message = "제목은 필수 입력 항목입니다")
@@ -107,4 +108,5 @@ public class BoardDto {
         }
         return boardDto;
     }
+
 }

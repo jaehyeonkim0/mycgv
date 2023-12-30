@@ -1,10 +1,13 @@
 package com.springboot.mycgv.model;
 
+import com.springboot.mycgv.enums.MemberRole;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
 /***
  * 비주인 엔터티는 주인 엔터티의 변경 사항을 읽기만 할 수 있습니다.
  */
@@ -13,7 +16,7 @@ import java.util.List;
 @Entity
 @Table(name = "mycgv_member")
 @NoArgsConstructor(access = AccessLevel.PROTECTED) //해당 클래스의 기본 생성자를 생성해 주는 어노테이션
-public class Member extends Time {
+public class Member extends Time implements UserDetails {
 
     @Id
     @Column(name = "ID")
@@ -52,10 +55,18 @@ public class Member extends Time {
     @OneToMany(mappedBy = "member")
     private List<Board> lists = new ArrayList<>();
 
+    @Enumerated(EnumType.STRING)
+    @ElementCollection(fetch = FetchType.LAZY)
+    private Set<MemberRole> roleSet = new HashSet<>();
+
+    private boolean del; //탈퇴 여부
+
+    private boolean social; //소셜 로그인 자동 회원 가입 여부
+
     @Builder
     public Member (String id, String password, String name, String gender,
                 String email, String addr, String tel, String pnumber,
-                String hobbyList, String intro, String grade) {
+                String hobbyList, String intro, String grade, boolean del, boolean social) {
         this.id = id;
         this.password = password;
         this.name = name;
@@ -67,6 +78,45 @@ public class Member extends Time {
         this.hobbyList = hobbyList;
         this.intro = intro;
         this.grade = grade;
+        this.del = del;
+        this.social = social;
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public String getUsername() {
+        return id;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
+    }
+
+    public void addRole(MemberRole memberRole){
+        this.roleSet.add(memberRole);
+    }
+
+    public void encrytPass(String password) {
+        this.password = password;
+    }
 }

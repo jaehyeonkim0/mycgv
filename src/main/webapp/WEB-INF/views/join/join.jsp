@@ -22,7 +22,7 @@
 					<li>
 						<label>아이디</label>
 						<input type="text" name="id" placeholder="* 아이디는 필수 입력 항목입니다" class="input1"
-							id="id" value="${memberDto.id}">
+							id="id" value="${oauthId == null ? memberDto.id : oauthId}" ${oauthId == null ? '' : 'readonly'}>
 						<button type="button" class="btn_style2" id="btnIdCheck">중복체크</button>
 						<span id="idcheck_msg"></span>
 						<span class="joinError">${valid_id}</span>
@@ -39,7 +39,7 @@
 					</li>
 					<li>
 						<label>성명</label>
-						<input type="text" name="name" class="input1" id="name" value="${memberDto.name}">
+						<input type="text" name="name" class="input1" id="name" value="${name == null ? memberDto.name : name}">
 						<span class="joinError">${valid_name}</span>
 					</li>
 					<li>
@@ -63,17 +63,18 @@
 					</li>
 					<li>
 						<label>휴대폰</label>
-						<input type="radio" name="tel" value="skt" ${memberDto.tel == 'skt' ? 'checked' : ''}><span>SKT</span>
-						<input type="radio" name="tel" value="lgu+" ${memberDto.tel == 'lgu+' ? 'checked' : ''}><span>LGU+</span>
-						<input type="radio" name="tel" value="kt" ${memberDto.tel == 'kt' ? 'checked' : ''}><span>KT</span>
-						<select name="phone1" id="phone1">
-							<option value="default">선택</option>
-							<option value="011">011</option>
-							<option value="010">010</option>
-							<option value="017">017</option>
-						</select>
-						- <input type="text" name="phone2" id="phone2">
-						- <input type="text" name="phone3" id="phone3">				
+<%--						<input type="radio" name="tel" value="skt" ${memberDto.tel == 'skt' ? 'checked' : ''}><span>SKT</span>--%>
+<%--						<input type="radio" name="tel" value="lgu+" ${memberDto.tel == 'lgu+' ? 'checked' : ''}><span>LGU+</span>--%>
+<%--						<input type="radio" name="tel" value="kt" ${memberDto.tel == 'kt' ? 'checked' : ''}><span>KT</span>--%>
+<%--						<select name="phone1" id="phone1">--%>
+<%--							<option value="">선택</option>--%>
+<%--							<option value="011">011</option>--%>
+<%--							<option value="010">010</option>--%>
+<%--							<option value="017">017</option>--%>
+<%--						</select>--%>
+<%--						- <input type="text" name="phone2" id="phone2">--%>
+<%--						- <input type="text" name="phone3" id="phone3">--%>
+						<input type="text" name="pnumber" class="input1" value="${pnumber == null ? "" : pnumber}" placeholder="-  없이 작성하시오">
 					</li>
 					<li>
 						<label>취미</label>
@@ -85,6 +86,9 @@
 					<li>
 						<label>자기소개</label>
 						<textarea name="intro" placeholder="*200자 이내로 작성해주세요"></textarea>
+					</li>
+					<li>
+						<input type="hidden" name="social" value="${social == true ? true : false}">
 					</li>
 					<li>
 						<button type="submit" class="btn_style" id="btnJoin">가입하기</button>

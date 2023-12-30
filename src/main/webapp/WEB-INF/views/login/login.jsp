@@ -8,7 +8,8 @@
 <title>MYCGV</title>
 <link rel="stylesheet" href="http://localhost:9005/css/mycgv_jsp.css">
 <script src="http://localhost:9005/js/jquery-3.6.4.min.js"></script>
-<script src="http://localhost:9005/js/mycgv_jsp_jquery.js"></script>
+<script src="http://localhost:9005/js/jwtTokenTest.js"></script>
+<%--<script src="http://localhost:9005/js/mycgv_jsp_jquery.js"></script>--%>
 </head>
 <body>
 	<jsp:include page="../header.jsp"></jsp:include>
@@ -41,6 +42,11 @@
 					<li>
 						<span><a href="#">아이디 찾기> </a></span>
 						<span><a href="#">비밀번호 찾기> </a></span>
+					</li>
+					<li>
+						<a href="/oauth2/authorization/kakao">KAKAO</a>
+						<a href="/oauth2/authorization/naver">NAVER</a>
+<%--						<a href="https://kauth.kakao.com/oauth/authorize">카카오</a>--%>
 					</li>
 				</ul>
 			</form>
