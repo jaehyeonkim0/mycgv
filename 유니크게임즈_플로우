@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2024-02-12T09:17:51.536Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36" etag="6tceqzOVquE7SkEQqhnT" version="23.1.2" type="github">
+<mxfile host="app.diagrams.net" modified="2024-02-12T09:37:25.766Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36" etag="NTqBRbZZ37CLXb_SvK-s" version="23.1.2" type="github">
   <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
     <mxGraphModel dx="910" dy="500" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1200" math="0" shadow="0">
       <root>
@@ -95,10 +95,10 @@
         <mxCell id="zREg-sY8_iSI-CBSi1ue-30" value="회원 가입" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
           <mxGeometry x="495" y="580" width="90" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="zREg-sY8_iSI-CBSi1ue-32" value="회원 정보 찾기" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+        <mxCell id="zREg-sY8_iSI-CBSi1ue-32" value="아이디 찾기" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
           <mxGeometry x="800" y="500" width="90" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="zREg-sY8_iSI-CBSi1ue-33" value="회원 정보 찾기" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+        <mxCell id="zREg-sY8_iSI-CBSi1ue-33" value="비밀번호 찾기" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
           <mxGeometry x="800" y="560" width="90" height="40" as="geometry" />
         </mxCell>
       </root>
