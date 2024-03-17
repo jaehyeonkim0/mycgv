@@ -1,11 +1,10 @@
 package com.springboot.mycgv.model.board;
 
-import com.springboot.mycgv.model.board.comment.Comment;
 import com.springboot.mycgv.model.Member;
 import com.springboot.mycgv.model.Time;
+import com.springboot.mycgv.model.board.comment.Comment;
 import com.springboot.mycgv.model.board.images.BoardImage;
 import lombok.*;
-import lombok.extern.log4j.Log4j2;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -16,7 +15,6 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "mycgv_board")
 @ToString(exclude = {"member", "commentEntityList", "boardImageList"})
-@Log4j2
 public class Board extends Time {
 
     @Id
