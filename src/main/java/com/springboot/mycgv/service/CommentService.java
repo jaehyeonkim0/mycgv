@@ -1,8 +1,8 @@
 package com.springboot.mycgv.service;
 
 import com.springboot.mycgv.dto.CommentDto;
-import com.springboot.mycgv.model.Board;
-import com.springboot.mycgv.model.Comment;
+import com.springboot.mycgv.model.board.Board;
+import com.springboot.mycgv.model.board.comment.Comment;
 import com.springboot.mycgv.repository.BoardRepository;
 import com.springboot.mycgv.repository.CommentRepository;
 import lombok.AllArgsConstructor;

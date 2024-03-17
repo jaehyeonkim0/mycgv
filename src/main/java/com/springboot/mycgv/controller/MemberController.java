@@ -5,7 +5,7 @@ import com.springboot.mycgv.dto.MemberDto;
 import com.springboot.mycgv.service.MemberService;
 import com.springboot.mycgv.service.ValidService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +23,7 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 @Controller
-@Slf4j
+@Log4j2
 public class MemberController {
 
     private final MemberService memberService;
@@ -49,7 +49,13 @@ public class MemberController {
     }
 
     @GetMapping("login")
-    public String login() {
+    public String login(HttpServletRequest request) {
+
+        String uri = request.getHeader("referer");
+        if (uri != null && !uri.contains("/login")) {
+            request.getSession().setAttribute("prevPage", uri);
+        }
+
         return "login/login";
     }
 
@@ -110,7 +116,7 @@ public class MemberController {
         return "redirect:/login";
     }
 
-    @GetMapping("mypage")
+    @GetMapping("/auth/mypage")
     public String mypage() {
         return "/mypage/mypage";
     }
@@ -126,5 +132,6 @@ public class MemberController {
 //                SecurityContextHolder.getContext().getAuthentication());
 //        return "redirect:/login";
 //    }
+
 
 }

@@ -1,5 +1,6 @@
 package com.springboot.mycgv.model;
 
+import com.springboot.mycgv.model.board.Board;
 import com.springboot.mycgv.repository.BoardRepository;
 import com.springboot.mycgv.repository.MemberRepository;
 import org.junit.jupiter.api.Test;

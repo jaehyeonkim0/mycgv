@@ -1,13 +1,15 @@
 package com.springboot.mycgv.config.mapstruct;
 
+import com.springboot.mycgv.dto.BoardDto;
 import com.springboot.mycgv.dto.MemberDto;
 import com.springboot.mycgv.model.Member;
+import com.springboot.mycgv.model.board.Board;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-12-29T15:23:31+0900",
+    date = "2024-03-07T20:06:56+0900",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 11.0.19 (Oracle Corporation)"
 )
 @Component
@@ -35,5 +37,23 @@ public class ModelMapStructImpl implements ModelMapStruct {
         member.social( memberDto.isSocial() );
 
         return member.build();
+    }
+
+    @Override
+    public BoardDto toBoardDtoList(Board board) {
+        if ( board == null ) {
+            return null;
+        }
+
+        BoardDto boardDto = new BoardDto();
+
+        boardDto.setBid( board.getBid() );
+        boardDto.setMember( board.getMember() );
+        boardDto.setBtitle( board.getBtitle() );
+        boardDto.setBcontent( board.getBcontent() );
+        boardDto.setBhits( board.getBhits() );
+        boardDto.setFileAttached( board.getFileAttached() );
+
+        return boardDto;
     }
 }

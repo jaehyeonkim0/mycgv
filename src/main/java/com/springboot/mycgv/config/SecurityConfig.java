@@ -3,22 +3,27 @@ package com.springboot.mycgv.config;
 //import com.springboot.mycgv.config.jwt.TokenProvider;
 
 import com.springboot.mycgv.config.exception.AccessDeniedHandlerImpl;
+import com.springboot.mycgv.config.jwt.TokenProvider;
+import com.springboot.mycgv.config.session.CustomSessionExpiredStrategy;
 import com.springboot.mycgv.security.CustomOAuth2UserService;
 import com.springboot.mycgv.security.handler.CustomLoginSuccessHandler;
 import com.springboot.mycgv.security.handler.CustomSocialLoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 @Configuration
 @EnableWebSecurity
@@ -29,7 +34,10 @@ public class SecurityConfig {
     private final AccessDeniedHandlerImpl accessDeniedHandler;
     private final UserDetailsService userDetailsService;    //UserDetailsService 란? Spring Security에서 유저의 정보를 가져오는 인터페이스
     private final CustomOAuth2UserService customOAuth2UserService;
-//    private final TokenProvider tokenProvider;
+    private final CustomSessionExpiredStrategy customSessionExpiredStrategy;
+    private final TokenProvider tokenProvider;
+//    private final CustomLoginSuccessHandler loginSuccessHandler;
+
 
     @Bean
     public static BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -38,11 +46,16 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationSuccessHandler authenticationSuccessHandler() {
-        return new CustomSocialLoginSuccessHandler();
+        return new CustomSocialLoginSuccessHandler(tokenProvider);
     }
 
+//    @Bean
+//    public SimpleUrlAuthenticationSuccessHandler simpleUrlAuthenticationSuccessHandler() {
+//        return new CustomLoginSuccessHandler(tokenProvider);
+//    }
+
     @Bean
-    public SimpleUrlAuthenticationSuccessHandler simpleUrlAuthenticationSuccessHandler() {
+    public AuthenticationSuccessHandler simpleUrlAuthenticationSuccessHandler() {
         return new CustomLoginSuccessHandler();
     }
 
@@ -75,16 +88,17 @@ public class SecurityConfig {
 //                .and()
         .authorizeRequests()
                 .antMatchers("/css/**", "/images/**", "/js/**", "/upload/**").permitAll()
-                .antMatchers("/", "/signup","/join", "/login","/board_list/**", "/comment/save", "/jwt/**").permitAll()
+                .antMatchers("/", "/signup","/join", "/login","/board_list/**", "/comment/save", "/jwt/**", "/register", "/reserve/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
-//        .addFilterBefore(new TokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+//        .addFilterBefore(new TokenAuthenticationFilter(tokenProvider, userDetailsService), UsernamePasswordAuthenticationFilter.class)
         .formLogin()                            //폼 기반 로그인을 사용하도록 설정
                 .permitAll()
                 .loginPage("/login")            // 기본 로그인 페이지, 사용자 정의 로그인 페이지의 URL을 설정합니다. /login 경로는 사용자 정의 로그인 페이지를 생성하는 데 사용
                 .usernameParameter("id")
                 .defaultSuccessUrl("/")
 //                .successHandler(simpleUrlAuthenticationSuccessHandler())
+                .successHandler(simpleUrlAuthenticationSuccessHandler())
                 .and()
         .logout()
                 //.permitAll()
@@ -106,10 +120,27 @@ public class SecurityConfig {
                 .and()
                 .successHandler(authenticationSuccessHandler());
 
+        http.sessionManagement()
+                .sessionFixation().changeSessionId()
+                .maximumSessions(1)
+                .expiredSessionStrategy(customSessionExpiredStrategy)
+                .maxSessionsPreventsLogin(false)
+                .sessionRegistry(sessionRegistry());
+
 
 
         return http.build();
         /* @formatter:on */
+    }
+
+    @Bean
+    public static ServletListenerRegistrationBean<HttpSessionEventPublisher> httpSessionEventPublisher() {
+        return new ServletListenerRegistrationBean<>(new HttpSessionEventPublisher());
+    }
+
+    @Bean
+    public SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl();
     }
 
     /**
@@ -132,6 +163,9 @@ public class SecurityConfig {
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
     }
+
+
+
 
 
 }

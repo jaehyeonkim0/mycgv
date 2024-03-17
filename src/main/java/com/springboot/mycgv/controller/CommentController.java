@@ -1,7 +1,7 @@
 package com.springboot.mycgv.controller;
 
 import com.springboot.mycgv.dto.CommentDto;
-import com.springboot.mycgv.model.Comment;
+import com.springboot.mycgv.model.board.comment.Comment;
 import com.springboot.mycgv.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

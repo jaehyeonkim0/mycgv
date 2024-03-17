@@ -1,15 +1,15 @@
 package com.springboot.mycgv.controller;
 
-import com.springboot.mycgv.config.LoginedUser;
+import com.springboot.mycgv.config.mapstruct.ModelMapStruct;
 import com.springboot.mycgv.dto.BoardDto;
 import com.springboot.mycgv.dto.CommentDto;
 import com.springboot.mycgv.dto.PageDto2;
-import com.springboot.mycgv.dto.UserSessionDto;
-import com.springboot.mycgv.model.Board;
-import com.springboot.mycgv.model.Comment;
+import com.springboot.mycgv.model.board.Board;
+import com.springboot.mycgv.model.board.comment.Comment;
 import com.springboot.mycgv.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -25,7 +25,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+//todo Controller 계층에는 DTO 만 존재하게 수정하기ㅋ
 @Controller
 @RequiredArgsConstructor
 @Slf4j
@@ -36,13 +38,21 @@ public class BoardController {
     private final CommentService commentService;
     private final ValidService validService;
     private final FileUploadService fileUploadService;
+    private final ModelMapStruct modelMapStruct;
 
     /**
      * 게시물 작성 페이지
      * @return 게시물 작성 VIEW
      */
+//    @PreAuthorize("hasRole('USER')")
+//    @GetMapping("board_write")
+//    public String board_wirte() {
+//        return "board/board_write";
+//    }
+
+
     @PreAuthorize("hasRole('USER')")
-    @GetMapping("board_write")
+    @GetMapping("/auth/board_write")
     public String board_wirte() {
         return "board/board_write";
     }
@@ -56,7 +66,7 @@ public class BoardController {
      * @return 게시판 리스트 VIEW
      * @throws IOException
      */
-    @PostMapping("board_write")
+    @PostMapping("/board_write")
     public String board_write_proc(@Valid @ModelAttribute BoardDto boardDto,
                                    Errors errors, Model model) throws IOException {
 
@@ -83,14 +93,16 @@ public class BoardController {
     public String board_list(Model model,
                              @PageableDefault(size = 5, sort = "bid", direction = Sort.Direction.DESC) Pageable pageable,
                              @RequestParam(required = false, defaultValue = "") String searchText) {
-
         Page<Board> list = boardService.listBoard(pageable, searchText);
 
+        //todo MapStruct 사용해서 DTO 변경
+        // Board.Entity createdTime 필드가 null이 아닌데
+        // MapStruct로 BoardDto.setBoardCreatedTime(board.getCreatedTime()) 해도 null 입력
+        List<BoardDto> boardDtoList = list.stream()
+                .map(board -> BoardDto.toBoardDtoList(board))
+                .collect(Collectors.toList());
+
         PageDto2 pageDto2 = PageDto2.toPageDto(list);
-        List<BoardDto> boardDtoList = new ArrayList<>();
-        for(Board board : list) {
-            boardDtoList.add(BoardDto.toDetailBoardDto(board));
-        }
 
         int startBlockPage = (pageDto2.getReqPage()/5) * 5 + 1; // 1
         int endBlockPage = startBlockPage + 5 - 1; //5
@@ -114,7 +126,7 @@ public class BoardController {
      * @return 게시판 상세 페이지 VIEW
      */
 //    @PreAuthorize("isAuthenticated()")
-    @GetMapping("board_content/{bid}/{page}")
+    @GetMapping("/auth/board_content/{bid}/{page}")
     public String board_content(Model model,
                                 @PathVariable Long bid,
                                 @PathVariable(required = false) String page,
@@ -124,13 +136,15 @@ public class BoardController {
         boardService.updateHits(bid);
         Page<Comment> commentList = commentService.findAll(bid, pageable);
 
+        BoardDto boardDto = boardService.detailBoard(bid);
+
         List<CommentDto> commentDtoList = new ArrayList<>();
         for(Comment comment : commentList) {
             commentDtoList.add(CommentDto.toCommentDTO(comment, bid));
         }
 
         model.addAttribute("commentDtoList", commentDtoList);
-        model.addAttribute("board", boardService.detailBoard(bid));
+        model.addAttribute("board", boardDto);
         model.addAttribute("page", page);
         model.addAttribute("searchText", searchText);
 
@@ -144,7 +158,7 @@ public class BoardController {
      * @param page 게시판 리스트 페이징 현재 페이지 정보
      * @return 게시물 수정 VIEW
      */
-    @GetMapping("board_update/{bid}/{page}")
+    @GetMapping("/auth/board_update/{bid}/{page}")
     public String board_update(Model model, @PathVariable Long bid,
                                @PathVariable(required = false) String page) {
         model.addAttribute("board", boardService.detailBoard(bid));
@@ -170,7 +184,7 @@ public class BoardController {
      * @param bid 게시판 ID
      * @return 게시판 리스트 VIEW
      */
-    @GetMapping("/board_delete/{bid}")
+    @GetMapping("/auth/board_delete/{bid}")
     public String delete(@PathVariable Long bid) throws IOException{
         boardService.deleteBoard(bid);
         return "redirect:/board_list";

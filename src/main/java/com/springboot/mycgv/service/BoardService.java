@@ -1,7 +1,7 @@
 package com.springboot.mycgv.service;
 
 import com.springboot.mycgv.dto.BoardDto;
-import com.springboot.mycgv.model.Board;
+import com.springboot.mycgv.model.board.Board;
 import com.springboot.mycgv.repository.BoardRepository;
 import com.springboot.mycgv.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,8 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.util.Optional;
 
+//todo Service 계층에서 DTO 변환 끝내기
 @Service
 @RequiredArgsConstructor
+@Transactional
 @Slf4j
 public class BoardService {
 
@@ -29,9 +31,10 @@ public class BoardService {
      * @param searchText 검색어
      * @return 제목 or 내용에 검색어를 포함한 게시판 리스트 목록
      */
+    @Transactional
     public Page<Board> listBoard(Pageable pageable, String searchText) {
         Page<Board> boardResult =
-                boardRepository.findByBtitleContainingOrBcontentContaining(searchText,searchText, pageable);
+                boardRepository.findByBtitleContainingOrBcontentContainingOrMemberId(searchText,searchText,searchText,pageable);
 
         return boardResult;
     }
@@ -44,11 +47,11 @@ public class BoardService {
     public void saveBoard(BoardDto boardDto) throws IOException {
         boardDto.setMember(memberRepository.findOneById(boardDto.getId()));
         Board board = boardDto.toEntity();
+        boardRepository.save(board);
 
         boardDto.putStoredImageNameList(board); //set storedImageName
         fileUploadService.imageSave(boardDto);
 
-       boardRepository.save(board);
     }
 
     /**
@@ -60,6 +63,7 @@ public class BoardService {
         if(boardDto.getStoredImageNameList() != null) {
             fileUploadService.imageDelete(boardDto);
             Board board = boardRepository.findById(boardDto.getBid()).orElseThrow();
+
             board.clearImage();
         }
         saveBoard(boardDto);
@@ -75,7 +79,7 @@ public class BoardService {
 
         if(optionalBoardEntity.isPresent()) {
             Board board = optionalBoardEntity.get();
-
+            log.info("현재 boardImageList size = {}", board.getBoardImageList().size());
             BoardDto boardDto = BoardDto.toDetailBoardDto(board);
             return boardDto;
         }else {
@@ -106,6 +110,7 @@ public class BoardService {
         }
         boardRepository.deleteById(bid);
     }
+
 
 
 

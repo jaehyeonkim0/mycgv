@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -54,14 +55,16 @@
 				<tr>
 					<th>작성일자</th>
 					<td>${board.boardUpdatedTime != null ? board.boardUpdatedTime : board.boardCreatedTime}</td>
+
 				</tr>
 				<tr>
 					<td colspan="2">
+						<sec:authentication property="principal.username" var="id"/>
 						<c:choose>
-							<c:when test="${sessionScope.loginUser.id == board.id}">
-								<a href="/board_update/${board.bid }/${page}">
+							<c:when test="${id == board.id}">
+								<a href="/auth/board_update/${board.bid }/${page}">
 									<button type="button" class="btn_style">수정하기</button></a>
-								<a href="/board_delete/${board.bid }">
+								<a href="/auth/board_delete/${board.bid }">
 									<button type="button" class="btn_style">삭제하기</button></a>
 								<a href="/board_list?page=${page}">
 									<button type="button" class="btn_style">리스트</button></a>

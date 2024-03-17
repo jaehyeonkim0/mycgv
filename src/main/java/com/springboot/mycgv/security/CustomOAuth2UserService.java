@@ -41,8 +41,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         String userNameAttributeName = userRequest.getClientRegistration()
                 .getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName();
 
-        log.info("이건 뭐야 = {}", userNameAttributeName); //id
-
         ClientRegistration clientRegistration = userRequest.getClientRegistration();
         String clientName = clientRegistration.getClientName();
 
@@ -76,7 +74,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private MemberSecurityDTO generateDTO(String email, String name, String pnumber, Map<String, Object> params){
 
-        Optional<Member> result = memberRepository.findById(email);
+        Optional<Member> result = memberRepository.getWithRoles(email);
 
         //데이터베이스에 해당 이메일을 사용자가 없다면
         if(result.isEmpty()){

@@ -1,28 +1,29 @@
 package com.springboot.mycgv.service;
 
+import com.springboot.mycgv.config.jwt.TokenProvider;
 import com.springboot.mycgv.config.mapstruct.ModelMapStruct;
 import com.springboot.mycgv.dto.MemberDto;
 import com.springboot.mycgv.enums.MemberRole;
-import com.springboot.mycgv.mapper.MemberMapper;
 import com.springboot.mycgv.model.Member;
 import com.springboot.mycgv.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.Cookie;
 
 @Service
 @RequiredArgsConstructor
 @Log4j2
 public class MemberService {
 
-    private final MemberMapper memberMapper;
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final ModelMapper modelMapper;
+    private final TokenProvider tokenProvider;
     private final ModelMapStruct modelMapStruct;
-//    private TokenProvider tokenProvider;
+//    private final ModelMapper modelMapper;
+//    private final MemberMapper memberMapper;
 
 //    public SessionDto login(MemberDto memberDto) {
 //        return memberMapper.login(memberDto);
@@ -34,27 +35,11 @@ public class MemberService {
 //    }
 
     public void save(MemberDto memberDto) {
-
-//        Member member = modelMapper.map(memberDto, Member.class);
-
-//        member.encrytPass(bCryptPasswordEncoder.encode(memberDto.getPassword()));
-//        member.addRole(MemberRole.USER);
-//
-//        log.info("=======================");
-//        log.info(member);
-//        log.info(member.getRoleSet());
-//
-//        memberRepository.save(member);
-
-        Member member = memberDto.toEntity();
+        Member member = modelMapStruct.toMemberEntity(memberDto);
         member.encrytPass(bCryptPasswordEncoder.encode(member.getPassword()));
         member.addRole(MemberRole.USER);
 
-        log.info(member.getRoleSet());
-
         memberRepository.save(member);
-
-//        memberDto.setPassword(bCryptPasswordEncoder.encode(memberDto.getPassword()));
     }
 
 //    public String login(String id, String password) {
@@ -70,8 +55,24 @@ public class MemberService {
 //    }
 
 
-    public int idCheck(String id) {
-        return memberMapper.idCheck(id);
+//    public int idCheck(String id) {
+//        return memberMapper.idCheck(id);
+//    }
+
+
+    public void register(MemberDto memberDto) {
+        Member member = modelMapStruct.toMemberEntity(memberDto);
+        member.encrytPass(bCryptPasswordEncoder.encode(member.getPassword()));
+        member.addRole(MemberRole.USER);
+
+        memberRepository.save(member);
+        String access_token = tokenProvider.generateToken(member.getId());
+
+        Cookie cookie = new Cookie("ac", access_token);
+        cookie.setHttpOnly(true);
+
+        log.info(cookie.getName());
+        log.info(cookie.getValue());
     }
 
 }

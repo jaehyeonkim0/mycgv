@@ -1,7 +1,7 @@
 package com.springboot.mycgv.dto;
 
-import com.springboot.mycgv.model.Board;
-import com.springboot.mycgv.model.Comment;
+import com.springboot.mycgv.model.board.Board;
+import com.springboot.mycgv.model.board.comment.Comment;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -8,13 +8,12 @@ import com.springboot.mycgv.repository.MemberRepository;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.util.Optional;
+import javax.persistence.EntityManager;
 import java.util.stream.IntStream;
 
 @SpringBootTest
@@ -23,39 +22,29 @@ class MemberServiceTest {
 
     @Autowired
     private MemberRepository memberRepository;
-
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    @Autowired
-    private ModelMapper modelMapper;
-
     @Autowired
     private ModelMapStruct modelMapStruct;
+    @Autowired
+    EntityManager em;
 
     @Test
     @DisplayName("convert Test")
     void convert() {
 
         MemberDto memberDto = MemberDto.builder()
-                .id("test2")
+                .id("test3")
                 .password("1111")
                 .name("테슷흐")
-                .email("test2@naver.com")
+                .email("test3@naver.com")
                 .build();
 
-        Member member = modelMapper.map(memberDto, Member.class);
-
         Member member1 = modelMapStruct.toMemberEntity(memberDto);
+        member1.encrytPass(bCryptPasswordEncoder.encode(member1.getPassword()));
+        member1.addRole(MemberRole.USER);
 
-        log.info(memberDto);
-        log.info(memberDto.getClass());
-        log.info("----------------------------------------");
-        log.info(member);
-        log.info(member.getClass());
-        log.info(member1);
-        log.info(member1.getClass());
-
+        memberRepository.save(member1);
     }
 
     @Test
@@ -94,18 +83,25 @@ class MemberServiceTest {
     }
 
     @Test
-    void testRead2() {
+    @DisplayName("멤버 저장")
+    void saveMember() {
+        Member member = Member.builder()
+                .id("test")
+                .password(bCryptPasswordEncoder.encode("123"))
+                .name("테스트")
+                .email("test@naver.com")
+                .build();
+        member.addRole(MemberRole.USER);
 
-        Optional<Member> member = memberRepository.findByEmail("test19@naver.com");
+        memberRepository.save(member);
+    }
 
-        Member member1 = member.orElseThrow();
+    @Test
+    @DisplayName("멤버 조회")
+    void getMember() {
+        String id = "test1";
+        Member member = em.find(Member.class, id);
 
-        log.info(member1);
-
-        member1.getRoleSet().forEach(memberRole -> {
-                log.info("---------------------");
-                log.info(memberRole.name());
-            }
-        );
+        Long bid = member.getLists().get(0).getBid();
     }
 }

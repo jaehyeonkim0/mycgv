@@ -1,5 +1,7 @@
-package com.springboot.mycgv.model;
+package com.springboot.mycgv.model.board.images;
 
+import com.springboot.mycgv.model.Time;
+import com.springboot.mycgv.model.board.Board;
 import lombok.*;
 
 import javax.persistence.*;

@@ -1,6 +1,6 @@
 package com.springboot.mycgv.dto;
 
-import com.springboot.mycgv.model.Comment;
+import com.springboot.mycgv.model.board.comment.Comment;
 import com.springboot.mycgv.repository.BoardRepository;
 import com.springboot.mycgv.repository.CommentRepository;
 import org.junit.jupiter.api.Test;

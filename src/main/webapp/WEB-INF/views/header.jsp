@@ -17,7 +17,7 @@
 					<ul>
 						<li><a href="http://localhost:9005/login">로그인</a></li>
 						<li><a href="http://localhost:9005/join">회원가입</a></li>
-						<li><a href="http://localhost:9005/mypage">마이페이지</a></li>
+						<li><a href="http://localhost:9005/auth/mypage">마이페이지</a></li>
 						<li><a href="#">고객센터</a></li>
 						<li><a href="http://localhost:9005/notice_list/1/">공지사항</a></li>
 						<li><a href="http://localhost:9005/board_list?page=0">게시판</a></li>
@@ -36,13 +36,13 @@
 							<li class="LoginUserName">${name}님 반갑습니다</li>
 							<li><a href="http://localhost:9005/logout">로그아웃</a></li>
 						</c:if>
-						<li><a href="http://localhost:9005/mypage">마이페이지</a></li>
+						<li><a href="http://localhost:9005/auth/mypage">마이페이지</a></li>
 						<li><a href="#">고객센터</a></li>
 						<li><a href="http://localhost:9005/notice_list/1/">공지사항</a></li>
 <%--						<li><a href="http://localhost:9005/board_list/1/">게시판</a></li>--%>
 						<li><a href="http://localhost:9005/board_list?page=0">게시판</a></li>
 						<li><a href="http://localhost:9005/board_list_json">게시판(JSON)</a></li>
-						<c:if test="${username == 'admin' }">
+						<c:if test="${username == 'test20' }">
 							<li id="admin-menu"><a href="http://localhost:9005/admin/index">ADMIN</a></li>
 						</c:if>
 					</ul>
@@ -67,7 +67,7 @@
 					<nav class="nav2">
 						<ul>
 							<li><a href="#">영화</a></li>
-							<li><a href="#">예매</a></li>
+							<li><a href="/reserve/home" class="reserve_nav">예매</a></li>
 							<li><a href="#">극장</a></li>
 							<li><a href="#">이벤트&컬처</a></li>
 						</ul>

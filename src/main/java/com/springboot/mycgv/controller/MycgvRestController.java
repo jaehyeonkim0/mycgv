@@ -7,7 +7,6 @@ import com.springboot.mycgv.service.PageService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -56,10 +55,10 @@ public class MycgvRestController {
 //        return map;
 //    }
 
-    @GetMapping("idCheck/{id}")
-    public String idCheck(@PathVariable String id){
-        return String.valueOf(memberService.idCheck(id));
-    }
+//    @GetMapping("idCheck/{id}")
+//    public String idCheck(@PathVariable String id){
+//        return String.valueOf(memberService.idCheck(id));
+//    }
 
 }
 

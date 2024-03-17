@@ -1,9 +1,8 @@
 package com.springboot.mycgv.dto;
 
-import com.springboot.mycgv.model.Board;
-import com.springboot.mycgv.model.BoardImage;
 import com.springboot.mycgv.model.Member;
-import lombok.AccessLevel;
+import com.springboot.mycgv.model.board.Board;
+import com.springboot.mycgv.model.board.images.BoardImage;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,7 +16,7 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class BoardDto {
 
     private Long bid;
@@ -46,12 +45,6 @@ public class BoardDto {
 
 
     public Board toEntity() {
-
-        if(getBoardImages() != null &&
-                !getBoardImages().get(0).getOriginalFilename().equals("")) {
-            fileAttached = 1;
-        }
-
         Board board = Board.builder()
                 .bid(bid)
                 .btitle(btitle)
@@ -63,7 +56,6 @@ public class BoardDto {
 
         if(getBoardImages() != null &&
                 !getBoardImages().get(0).getOriginalFilename().equals("")) {
-
             for(MultipartFile file : getBoardImages()) {
                 board.addImage(UUID.randomUUID().toString(), file.getOriginalFilename());
             }
@@ -73,12 +65,23 @@ public class BoardDto {
 
     public void putStoredImageNameList(Board board) {
         storedImageNameList = new ArrayList<>();
-        
-        for(int i=0; i<board.getBoardImageList().size(); i++) {
-            setStoredImageName(board.getBoardImageList().get(i).getStoredImageName());
-            storedImageNameList.add(getStoredImageName());
+        for(BoardImage boardImage : board.getBoardImageList()) {
+            storedImageNameList.add(boardImage.getStoredImageName());
         }
+    }
 
+
+    public static BoardDto toBoardDtoList(Board board) {
+        BoardDto boardDto = new BoardDto();
+        boardDto.setBid(board.getBid());
+        boardDto.setBtitle(board.getBtitle());
+        boardDto.setBcontent(board.getBcontent());
+        boardDto.setBhits(board.getBhits());
+        boardDto.setId(board.getMember().getId());
+        boardDto.setBoardCreatedTime(board.getCreatedTime());
+        boardDto.setBoardUpdatedTime(board.getUpdatedTime());
+
+        return boardDto;
     }
 
     public static BoardDto toDetailBoardDto(Board board) {

@@ -1,5 +1,6 @@
 package com.springboot.mycgv.model;
 
+import com.springboot.mycgv.model.board.Board;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,7 +37,7 @@ class BoardTest {
                 .member(member)
                 .build();
 
-        member.getLists().add(board);
+//        member.getLists().add(board);
 
     }
 }

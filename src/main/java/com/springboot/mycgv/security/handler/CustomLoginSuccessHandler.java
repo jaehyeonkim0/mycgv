@@ -2,8 +2,7 @@ package com.springboot.mycgv.security.handler;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -12,18 +11,19 @@ import java.io.IOException;
 
 
 @Log4j2
-public class CustomLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
+public class CustomLoginSuccessHandler extends LoginSuccessHandler implements AuthenticationSuccessHandler {
 
+    //    private final RequestCache requestCache = new HttpSessionRequestCache();
+//    private final RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+    public void onAuthenticationSuccess(HttpServletRequest request,
+                                        HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
-        String prevPage = request.getRequestURI();
-        User user = (User) authentication.getPrincipal();
-        log.info("로그인한 사용자 = {}", user);
-
-        response.sendRedirect(prevPage);
-        log.info(prevPage);
-
+        redirectPrevPage(request, response, authentication);
     }
 
+    @Override
+    protected void getToken() {
+        log.info("일반 로그인 시 토큰 발행");
+    }
 }

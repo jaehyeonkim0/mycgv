@@ -18,7 +18,7 @@
 	<div class="content">
 		<section class="board">
 			<h1 class="title">게시판</h1>
-			<form name="writeForm" action="board_write" method="post" enctype="multipart/form-data">
+			<form name="writeForm" action="/board_write" method="post" enctype="multipart/form-data">
 				<table>
 					<tr>
 						<th class="test">제목</th>

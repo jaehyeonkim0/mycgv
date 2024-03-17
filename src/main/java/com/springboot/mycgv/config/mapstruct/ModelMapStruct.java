@@ -1,7 +1,9 @@
 package com.springboot.mycgv.config.mapstruct;
 
+import com.springboot.mycgv.dto.BoardDto;
 import com.springboot.mycgv.dto.MemberDto;
 import com.springboot.mycgv.model.Member;
+import com.springboot.mycgv.model.board.Board;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
@@ -9,4 +11,6 @@ import org.mapstruct.ReportingPolicy;
 public interface ModelMapStruct {
 
     public Member toMemberEntity(MemberDto memberDto);
+
+    BoardDto toBoardDtoList(Board board);
 }

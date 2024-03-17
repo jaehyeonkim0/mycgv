@@ -1,91 +1,84 @@
 package com.springboot.mycgv.repository;
 
-import com.springboot.mycgv.model.Board;
+import com.springboot.mycgv.enums.MemberRole;
 import com.springboot.mycgv.model.Member;
+import com.springboot.mycgv.model.board.Board;
+import com.springboot.mycgv.model.board.comment.Comment;
+import com.springboot.mycgv.model.board.images.BoardImage;
+import com.springboot.mycgv.service.BoardService;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.util.Optional;
+import java.util.List;
 
 @SpringBootTest
 @Log4j2
 class BoardRepositoryTest {
 
     @Autowired
-    private BoardRepository boardRepository;
+    private BoardService boardService;
+    @Autowired
+    BoardRepository boardRepository;
+    @Autowired
+    MemberRepository memberRepository;
+    @Autowired
+    BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Test
-    public void testInsertWithImages() {
+    @DisplayName("게시판 저장")
+    void saveBoard() {
+        Member member = memberRepository.findOneById("test");
 
-        for(int i=0; i<30; i++) {
-            Board board = Board.builder()
-                    .btitle("게시판 입력 테스트 " + i)
-                    .bcontent("게시판 입력 테스트 " + i)
-                    .member(Member.builder().id("test").build())
-                    .fileAttached(0)
-                    .build();
+        Board board = Board.builder()
+                .btitle("제목1")
+                .bcontent("내용1")
+                .build();
+        board.addMember(member);
 
-            boardRepository.save(board);
-        }
-
-
-//        for(int i=0;i<5;i++) {
-//            board.addImage(UUID.randomUUID().toString(), "file"+i+".jpg");
-//        }
-
-
+        boardRepository.save(board);
     }
 
     @Test
-    @DisplayName(value = "Fetch Test")
-    public void FetchTest() {
+    @DisplayName("게시판 조회")
+    void getBoard() {
+        Board board = boardRepository.findById(10L).get();
 
-        Optional<Board> board = boardRepository.findById(41L);
+        List<BoardImage> boardImageList = board.getBoardImageList();
 
-        Board board1 = board.orElseThrow();
+        Member member = board.getMember();
 
-        log.info(board1);
-
+        List<Comment> comments = board.getCommentEntityList();
     }
 
     @Test
-    public void indexOfTest() {
-
-        String str = "To be, or not to be, that is the question.";
-        char searchValue = 'e';
-        int fromIndex = str.indexOf(searchValue);
-        log.info("fromIndex = {}", fromIndex);
-
-    }
+    @DisplayName("양방향 테스트")
+    void saveMemberBoard() {
 
 
+        Member member = Member.builder()
+                .id("test5")
+                .password(bCryptPasswordEncoder.encode("123"))
+                .name("테스트5")
+                .email("test5@naver.com")
+                .build();
+        member.addRole(MemberRole.USER);
 
+        memberRepository.save(member);
+        Board board = Board.builder()
+                .btitle("제목6")
+                .bcontent("내용6")
+                .build();
 
-    @Test
-    public void testReadImages() {
+        member.getLists().add(board);
+        board.addMember(member);
 
-
-        long startTime = System.currentTimeMillis();
-
-        Optional<Board> result = boardRepository.findByIdWithBoardImage(42L);
-
-        Board board = result.orElseThrow();
-
-        log.info("Response Time = {}ms board = {}",
-                (System.currentTimeMillis()-startTime), board);
-
-
-//        log.info(board);
-//        log.info("-------------------------------------------------");
-//
-//        for (BoardImage boardImage : board.getBoardImageList()) {
-//            log.info(boardImage);
-//        }
-
-
+        boardRepository.save(board);
+        List<Board> list = member.getLists();
+        log.info("list size = {}",list.size());
     }
 
 }

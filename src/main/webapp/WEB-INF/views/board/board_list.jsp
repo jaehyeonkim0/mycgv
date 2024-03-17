@@ -46,7 +46,7 @@
 						</div>
 					</td>
 					<td colspan="4">
-						<a href="/board_write">
+						<a href="/auth/board_write">
 							<button type="button" class="btn_style2">글쓰기</button>
 						</a>
 					</td>
@@ -61,7 +61,7 @@
 				<c:forEach var="board" items="${board }" varStatus="loop">
 					<tr>
 						<td>${page.dbCount - (page.size * page.reqPage) - loop.index}</td>
-						<td><a href="/board_content/${board.bid }/${page.reqPage}&searchText=${param.searchText}">${board.btitle }</a></td>
+						<td><a href="/auth/board_content/${board.bid }/${page.reqPage}&searchText=${param.searchText}">${board.btitle }</a></td>
 						<td>${board.bhits }</td>
 						<td>${board.id }</td>
 						<td>${board.boardUpdatedTime != null ? board.boardUpdatedTime : board.boardCreatedTime}</td>

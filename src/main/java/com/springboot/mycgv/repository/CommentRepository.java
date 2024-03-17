@@ -1,7 +1,7 @@
 package com.springboot.mycgv.repository;
 
-import com.springboot.mycgv.model.Board;
-import com.springboot.mycgv.model.Comment;
+import com.springboot.mycgv.model.board.Board;
+import com.springboot.mycgv.model.board.comment.Comment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

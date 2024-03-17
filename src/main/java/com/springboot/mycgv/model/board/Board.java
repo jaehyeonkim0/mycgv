@@ -1,6 +1,11 @@
-package com.springboot.mycgv.model;
+package com.springboot.mycgv.model.board;
 
+import com.springboot.mycgv.model.board.comment.Comment;
+import com.springboot.mycgv.model.Member;
+import com.springboot.mycgv.model.Time;
+import com.springboot.mycgv.model.board.images.BoardImage;
 import lombok.*;
+import lombok.extern.log4j.Log4j2;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -9,18 +14,13 @@ import java.util.List;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@SequenceGenerator(
-        name = "BOARD_SEQ_GENERATOR",
-        sequenceName = "SEQU_MYCGV_BOARD", // 매핑할 데이터베이스 시퀀스 이름
-        initialValue = 1,
-        allocationSize = 1)
 @Table(name = "mycgv_board")
 @ToString(exclude = {"member", "commentEntityList", "boardImageList"})
+@Log4j2
 public class Board extends Time {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,
-                    generator = "BOARD_SEQ_GENERATOR")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long bid;
 
     @Column(name = "BTITLE", nullable = false)
@@ -42,7 +42,7 @@ public class Board extends Time {
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Comment> commentEntityList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "board", cascade = {CascadeType.ALL}, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<BoardImage> boardImageList = new ArrayList<>();
 
     @Builder
@@ -56,6 +56,16 @@ public class Board extends Time {
         this.fileAttached = fileAttached;
     }
 
+    @Builder
+    public Board (Long bid, String btitle, String bcontent,
+                  int bhits, int fileAttached) {
+        this.bid = bid;
+        this.btitle = btitle;
+        this.bcontent = bcontent;
+        this.bhits = bhits;
+        this.fileAttached = fileAttached;
+    }
+
     public void addImage(String uuid, String originalImageName) {
         BoardImage boardImage = BoardImage.builder()
                 .uuid(uuid)
@@ -64,14 +74,14 @@ public class Board extends Time {
                 .board(this)
                 .fileOrder(boardImageList.size())
                 .build();
-        boardImageList.add(boardImage);
+        this.boardImageList.add(boardImage);
+        this.fileAttached = 1;
     }
 
+
     public void clearImage() {
-
         boardImageList.forEach(boardImage -> boardImage.changeBoard(null));
-
-        this.boardImageList.clear();
+//        this.boardImageList.clear();
     }
 
     public void clearComment() {
@@ -80,6 +90,10 @@ public class Board extends Time {
 
         this.commentEntityList.clear();
 
+    }
+
+    public void addMember(Member member) {
+        this.member = member;
     }
 
 }

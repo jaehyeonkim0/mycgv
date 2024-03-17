@@ -8,52 +8,104 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
+@Log4j2
 public class TokenProvider {
-
     private final JwtProperties jwtProperties;
     private final MemberRepository memberRepository;
-//    String encodedKey =
-//            Base64.getEncoder().encodeToString(jwtProperties.getSecretkey().getBytes());
 
-    public String generateToken(String id, long expTime) {
+    public String generateToken(String id) {
+        Member member = memberRepository.findOneById(id);
 
-        if(expTime<=0) {
-            throw new RuntimeException("만료시간이 0보다 작습니다");
-        }else if(!memberRepository.existsById(id)){
+
+        if(!memberRepository.existsById(id)){
             throw new UsernameNotFoundException("해당 사용자가 존재하지 않습니다. : " + id);
         }
-
-        Date now = new Date();
-        return makeToken(memberRepository.findOneById(id), expTime);
+        return makeToken(member);
     }
 
-    private String makeToken(Member member, long expTime) {
-
+    private String makeToken(Member member) {
         Date now = new Date();
-
-        return Jwts.builder()
-                .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
+        long expTime = jwtProperties.getExptime();
+        
+        Claims claims = Jwts.claims()
                 .setIssuer(jwtProperties.getIssuer())
                 .setIssuedAt(now)
                 .setExpiration(new Date(System.currentTimeMillis() + expTime))
-                .setSubject(member.getEmail())
-                .claim("id", member.getId())
-                .signWith(Keys.hmacShaKeyFor(Base64.getEncoder().encodeToString(jwtProperties.getSecretkey().getBytes()).getBytes()), SignatureAlgorithm.HS256)
-                .compact();
+                .setSubject(member.getEmail());
 
+        claims.put("id", member.getId());
+
+        return Jwts.builder()
+                .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
+                .setClaims(claims)
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .compact();
     }
+
+    private Key getSigningKey() {
+        return Keys.hmacShaKeyFor(jwtProperties.getSecretkey().getBytes());
+    }
+
+    public String getUserId(String token) {
+        return getAllClaims(token).get("id", String.class);
+    }
+
+    public boolean isTokenValid(String token, UserDetails userDetails) {
+        final String username = getUserId(token);
+        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+    }
+
+    public boolean isTokenExpired(String token) {
+        return getTokenExpired(token).before(new Date());
+    }
+
+    private Date getTokenExpired(String token) {
+        return getAllClaims(token).getExpiration();
+    }
+
+    private Claims getAllClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //--------------------------------------------------------------------------------------------------------
 
     public boolean validToken(String token) {
         try {
@@ -122,5 +174,16 @@ public class TokenProvider {
 //                .parseClaimsJws(token)
 //                .getBody();
 //
+//    }
+
+
+//    public String getUserId(String token) {
+//        Claims claims = Jwts.parserBuilder()
+//                .setSigningKey(getSigningKey())
+//                .build()
+//                .parseClaimsJws(token)
+//                .getBody();
+//
+//        return claims.get("id", String.class);
 //    }
 }

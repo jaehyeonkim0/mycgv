@@ -2,14 +2,36 @@ package com.springboot.mycgv.service;
 
 import com.springboot.mycgv.dto.PageDto;
 import com.springboot.mycgv.mapper.PageMapper;
+import com.springboot.mycgv.repository.BoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.awt.print.Pageable;
 
 @Service
 public class PageService {
 
-    @Autowired
     private PageMapper pageMapper;
+    private BoardRepository boardRepository;
+
+    @Autowired
+    public PageService(BoardRepository boardRepository) {
+        this.boardRepository = boardRepository;
+    }
+
+    public PageDto getPageInfo(Pageable pageable) {
+
+
+
+        return null;
+    }
+
+
+
+
+
+
+
 
     public PageDto getPageResult(PageDto pageDto) {
         //페이징 처리 - startCount, endCount 구하기
