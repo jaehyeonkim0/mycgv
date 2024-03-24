@@ -70,7 +70,6 @@ public class Member extends Time implements UserDetails {
 
     private boolean social; //소셜 로그인 자동 회원 가입 여부
 
-    //2024-02-09 영화 예매 엔티티 추가 후
     @OneToMany(mappedBy = "member")
     private List<Reservation> reservations = new ArrayList<>();
 
@@ -141,25 +140,4 @@ public class Member extends Time implements UserDetails {
         this.password = password;
     }
 
-    /**
-     * 제공된 개체가 동일한 사용자 이름 값을 가진 User 인스턴스인 경우 true를 반환합니다.
-     * 즉, 개체의 사용자 이름이 동일하고 동일한 기본값을 나타내는 경우 개체는 동일합니다.
-     */
-    @Override
-    public boolean equals(Object obj) {
-        if(obj instanceof Member) {
-            return this.id.equals(((Member) obj).id);
-        }
-        return false;
-    }
-
-    /**
-     * 객체를 식별할 수 있는 유니크한 값을 말한다.
-     * 메모리에 생성된 객체의 주소를 정수로 변환한 형태를 얘기하는데,
-     * 이 정수는 중복되지 않는 고유의 값이다
-     */
-    @Override
-    public int hashCode() {
-        return this.id.hashCode();
-    }
 }

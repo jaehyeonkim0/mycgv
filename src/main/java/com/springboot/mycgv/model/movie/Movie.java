@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * location : 지역 (서울, 경기..)
@@ -44,14 +46,14 @@ public class Movie {
     @OneToMany(mappedBy = "movie")
     private List<Reservation> reservationList = new ArrayList<>();
 
+    @Enumerated(EnumType.STRING)
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "mycgv_movie_type")
+    private Set<MovieType> movieType = new HashSet<>();
+
 //    다대다 연결이지만, 단방향으로 연결; 아직 다대다 확실히 알지 못함
 //    @OneToMany(mappedBy = "movie")
 //    private Set<MovieSpot> movieSpotSet = new HashSet<>();
-
-//    @Enumerated(EnumType.STRING)
-//    @ElementCollection(fetch = FetchType.LAZY)
-//    @CollectionTable(name = "mycgv_movie_type", joinColumns = @JoinColumn(name = "movie_name"))
-//    private Set<MovieType> movieType = new HashSet<>();
 
     @Builder
     public Movie(String movieName, String ageLimit, String startDate, String endDate) {
